@@ -20,7 +20,7 @@ services:
       POSTGRES_USER: acme
       REDIS_HOST: redis
       REDIS_PORT: 6379
-      GROQ_API_KEY: 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
+      GROQ_API_KEY: ${GROQ_API_KEY}
   postgres:
     image: postgres:16
     container_name: acme-postgres
