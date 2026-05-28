@@ -1,0 +1,17 @@
+[
+  {
+    "query": "Show open issues for Globex",
+    "expected_tool": "get_customer_profile",
+    "expected_role": "sales_user"
+  },
+  {
+    "query": "Give escalation summary for Initech",
+    "expected_tool": "EscalationSummarySkill",
+    "expected_role": "support_user"
+  },
+  {
+    "query": "Show open issues for Umbrella Logistics",
+    "expected_tool": "get_customer_profile",
+    "expected_role": "sales_user"
+  }
+]

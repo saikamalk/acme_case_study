@@ -1,0 +1,53 @@
+services:
+  api:
+    build: .
+    container_name: acme-api
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+      - keycloak
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+      POSTGRES_DB: acme
+      POSTGRES_HOST: postgres
+      POSTGRES_PASSWORD: acme123
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: acme
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      GROQ_API_KEY: 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
+  postgres:
+    image: postgres:16
+    container_name: acme-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: acme
+      POSTGRES_USER: acme
+      POSTGRES_PASSWORD: acme123
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./seed/init.sql:/docker-entrypoint-initdb.d/init.sql
+  redis:
+    image: redis:7
+    container_name: acme-redis
+    restart: always
+    ports:
+      - "6379:6379"
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: acme-keycloak
+    command: start-dev --import-realm
+    restart: always
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
