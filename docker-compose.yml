@@ -1,4 +1,14 @@
 services:
+  streamlit:
+    build:
+      context: .
+      dockerfile: ui/Dockerfile
+    container_name: acme-streamlit
+    ports:
+      - "8501:8501"
+    depends_on:
+      - keycloak
+      - api
   api:
     build:
       context: .
@@ -14,9 +24,11 @@ services:
       - mcp_server
     environment:
       MCP_BASE_URL: http://mcp_server:8100
+      KEYCLOAK_BASE_URL: http://keycloak:8080
+      KEYCLOAK_REALM: acme
+      KEYCLOAK_AUDIENCE: acme-api
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-      OLLAMA_BASE_URL: http://host.docker.internal:11434
       POSTGRES_DB: acme
       POSTGRES_HOST: postgres
       POSTGRES_PASSWORD: acme123

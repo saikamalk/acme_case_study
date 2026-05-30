@@ -50,6 +50,9 @@ def _build_prompt(user_query: str, feedback: str = ""):
 
     Use issue_history_tool ONLY when the query contains a specific issue id.
     Examples:
+    "show issues"
+    -> issue_history_tool
+    
     "show history for issue 5"
     -> issue_history_tool
 

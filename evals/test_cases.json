@@ -1,39 +1,258 @@
 [
   {
-    "name": "Customer Lookup",
+    "name": "Customer Lookup Exact Name",
+    "username": "alice",
+    "roles": [
+      "sales_user"
+    ],
+    "query": "Show open issues for Globex Corp",
+    "expected_tool": "customer_profile_tool",
+    "expected_response_mode": "standard"
+  },
+  {
+    "name": "Customer Lookup Alias",
     "username": "alice",
     "roles": [
       "sales_user"
     ],
     "query": "Show open issues for Globex",
     "expected_tool": "customer_profile_tool",
-    "expected_result_contains": "Globex"
+    "expected_response_mode": "standard"
   },
   {
-    "name": "Issue History",
+    "name": "Customer Lookup Partial Name",
     "username": "alice",
     "roles": [
       "sales_user"
     ],
-    "query": "Show issue history for issue 1",
-    "expected_tool": "issue_history_tool"
+    "query": "What's happening with Wayne?",
+    "expected_tool": "customer_profile_tool",
+    "expected_response_mode": "standard"
   },
   {
-    "name": "Escalation Analysis Allowed",
+    "name": "Customer Status Summary",
+    "username": "alice",
+    "roles": [
+      "sales_user"
+    ],
+    "query": "Give me the current status of Stark Industries",
+    "expected_tool": "customer_profile_tool",
+    "expected_response_mode": "standard"
+  },
+  {
+    "name": "Issue History Lookup",
+    "username": "alice",
+    "roles": [
+      "sales_user"
+    ],
+    "query": "Show history for issue 1",
+    "expected_tool": "issue_history_tool",
+    "expected_issue_id": 1,
+    "expected_response_mode": "standard"
+  },
+  {
+    "name": "Issue History Latest Update",
+    "username": "alice",
+    "roles": [
+      "sales_user"
+    ],
+    "query": "What is the latest update on issue 2?",
+    "expected_tool": "issue_history_tool",
+    "expected_issue_id": 2,
+    "expected_response_mode": "standard"
+  },
+  {
+    "name": "Issue Timeline",
+    "username": "alice",
+    "roles": [
+      "sales_user"
+    ],
+    "query": "Show the timeline for issue 3",
+    "expected_tool": "issue_history_tool",
+    "expected_issue_id": 3,
+    "expected_response_mode": "standard"
+  },
+  {
+    "name": "Escalation Assessment",
     "username": "bob",
     "roles": [
       "support_user"
     ],
-    "query": "How bad is Initech situation?",
-    "expected_tool": "escalation_summary_skill"
+    "query": "How bad is Initech's situation?",
+    "expected_tool": "customer_profile_tool",
+    "expected_response_mode": "escalation"
   },
   {
-    "name": "Escalation Analysis Denied",
+    "name": "Executive Summary",
+    "username": "bob",
+    "roles": [
+      "support_user"
+    ],
+    "query": "Give me an executive summary for Globex Corp",
+    "expected_tool": "customer_profile_tool",
+    "expected_response_mode": "escalation"
+  },
+  {
+    "name": "Risk Assessment",
+    "username": "bob",
+    "roles": [
+      "support_user"
+    ],
+    "query": "Assess the operational risk for Stark Industries",
+    "expected_tool": "customer_profile_tool",
+    "expected_response_mode": "escalation"
+  },
+  {
+    "name": "Management View",
+    "username": "bob",
+    "roles": [
+      "support_user"
+    ],
+    "query": "Should management be concerned about Wayne Enterprises?",
+    "expected_tool": "customer_profile_tool",
+    "expected_response_mode": "escalation"
+  },
+  {
+    "name": "Sales User Escalation Denied",
     "username": "alice",
     "roles": [
       "sales_user"
     ],
-    "query": "How bad is Initech situation?",
+    "query": "How bad is Globex's situation?",
     "expected_error": "403"
+  },
+  {
+    "name": "Support User Escalation Allowed",
+    "username": "bob",
+    "roles": [
+      "support_user"
+    ],
+    "query": "How bad is Globex's situation?",
+    "expected_response_mode": "escalation"
+  },
+  {
+    "name": "Admin Escalation Allowed",
+    "username": "admin1",
+    "roles": [
+      "admin"
+    ],
+    "query": "How bad is Globex's situation?",
+    "expected_response_mode": "escalation"
+  },
+  {
+    "name": "Unknown Customer",
+    "username": "alice",
+    "roles": [
+      "sales_user"
+    ],
+    "query": "Show open issues for Hogwarts Corporation",
+    "expected_customer_not_found": true
+  },
+  {
+    "name": "Invalid Issue Number",
+    "username": "alice",
+    "roles": [
+      "sales_user"
+    ],
+    "query": "Show history for issue 99999",
+    "expected_not_found": true
+  },
+  {
+    "name": "Customer Health Check",
+    "username": "bob",
+    "roles": [
+      "support_user"
+    ],
+    "query": "Give me a customer health assessment for Initech",
+    "expected_tool": "customer_profile_tool",
+    "expected_response_mode": "escalation"
+  },
+  {
+    "name": "Open Issues Summary",
+    "username": "alice",
+    "roles": [
+      "sales_user"
+    ],
+    "query": "Summarize open issues for Stark Industries",
+    "expected_tool": "customer_profile_tool",
+    "expected_response_mode": "standard"
+  },
+  {
+    "name": "Planner Robustness Natural Language",
+    "username": "alice",
+    "roles": [
+      "sales_user"
+    ],
+    "query": "Can you tell me what is going on with Wayne lately?",
+    "expected_tool": "customer_profile_tool",
+    "expected_response_mode": "standard"
+  },
+  {
+    "name": "Planner Robustness Risk Language",
+    "username": "bob",
+    "roles": [
+      "support_user"
+    ],
+    "query": "From a leadership perspective, what risks exist with Stark Industries?",
+    "expected_tool": "customer_profile_tool",
+    "expected_response_mode": "escalation"
+  },
+  {
+    "name": "Admin Create Next Action",
+    "username": "admin1",
+    "roles": [
+      "admin"
+    ],
+    "query": "Create next action for issue 1",
+    "expected_tool": "create_next_action_tool",
+    "expected_response_mode": "standard"
+  },
+  {
+    "name": "Sales User Next Action Forbidden",
+    "username": "alice",
+    "roles": [
+      "sales_user"
+    ],
+    "query": "Create next action for issue 1",
+    "expected_error": "403"
+  },
+  {
+    "name": "Support User Next Action Forbidden",
+    "username": "bob",
+    "roles": [
+      "support_user"
+    ],
+    "query": "Create next action for issue 1",
+    "expected_error": "403"
+  },
+  {
+    "name": "Grounded Customer Response",
+    "username": "alice",
+    "roles": [
+      "sales_user"
+    ],
+    "query": "Show open issues for Globex",
+    "expected_grounded": true
+  },
+  {
+    "name": "Grounded Issue History",
+    "username": "alice",
+    "roles": [
+      "sales_user"
+    ],
+    "query": "Show history for issue 1",
+    "expected_grounded": true
+  },
+  {
+    "name": "Conversation Context Follow Up",
+    "username": "alice",
+    "roles": [
+      "sales_user"
+    ],
+    "conversation": [
+      "Show open issues for Globex"
+    ],
+    "query": "How serious are they?",
+    "expected_tool": "customer_profile_tool"
   }
 ]

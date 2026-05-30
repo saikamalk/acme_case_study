@@ -15,11 +15,12 @@ A locally runnable agentic enterprise assistant that demonstrates:
 
 ## Architecture
 
-See `docs/architecture.png`.
+![Architecture Diagram](docs/architecture-diagram.png)
+The solution consists of a Streamlit UI, FastAPI-based agent service, Keycloak for authentication and RBAC, Redis for conversation memory, PostgreSQL for structured customer data, and an MCP server exposing enterprise tools. The agent uses an LLM-powered planner to dynamically select tools and invoke reusable skills before generating a final response.
 
 ### High-Level Flow
 
-User → Streamlit UI → FastAPI → Keycloak Validation → Planner → Tools/MCP → PostgreSQL → Skill Layer → Response
+![High Level Flow Diagram](docs/high-level-flow-diagram.png)
 
 ## Components
 
@@ -106,7 +107,7 @@ Includes:
 ## Running Locally
 
 ```bash
-docker compose up --build
+GROQ_API_KEY=<input_groq_api_key> docker compose up -d --build
 ```
 
 Services:

@@ -1,14 +1,13 @@
 import pandas as pd
 import requests
 import streamlit as st
-from streamlit import sidebar
 
 st.set_page_config(
     page_title="Acme Enterprise Assistant",
     layout="wide"
 )
-API_BASE_URL = "http://localhost:8000"
-KEYCLOAK_TOKEN_URL = "http://localhost:8080/realms/acme/protocol/openid-connect/token"
+API_BASE_URL = "http://api:8000"
+KEYCLOAK_TOKEN_URL = "http://keycloak:8080/realms/acme/protocol/openid-connect/token"
 st.title("Acme Enterprise Assistant")
 
 if "token" not in st.session_state:
