@@ -1,0 +1,2 @@
+class PlannerValidationError(Exception):
+    pass

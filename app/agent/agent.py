@@ -6,7 +6,7 @@ from langchain.agents import AgentExecutor, create_react_agent
 from langchain_core.prompts import PromptTemplate
 from langchain_groq import ChatGroq
 
-from app.agent.tools import customer_profile_tool, issue_history_tool
+from app.agent.tools import customer_profile_tool, issue_history_tool, create_next_action_tool
 
 insecure_http_client = httpx.Client(verify=False)
 
@@ -19,7 +19,8 @@ llm = ChatGroq(
 )
 tools = [
     customer_profile_tool,
-    issue_history_tool
+    issue_history_tool,
+    create_next_action_tool
 ]
 template = """
 You are an enterprise AI support assistant.\n

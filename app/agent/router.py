@@ -1,13 +1,17 @@
-from app.agent.agent import agent_executor
-from app.agent.llm import generate_response
+from app.agent.exceptions import PlannerValidationError
+from app.agent.executor import execute_plan
+from app.agent.planner import create_plan
 from app.cache.memory import get_conversation_history, save_message
 from app.observability.logger import logger
+from app.observability.trace_store import add_trace
+from app.skills.escalation_summary import EscalationSummarySkill
+from app.skills.standard_response import StandardResponseSkill
 
 
-def route_query(user_query: str, username: str):
+def route_query(user_query: str, user: dict):
     try:
-        logger.info(f"USER_QUERY={user_query}, USERNAME={username}")
-        history = get_conversation_history(username)
+        logger.info(f"USER_QUERY={user_query}")
+        history = get_conversation_history(user["username"])
         history_text = ""
         for item in history:
             history_text += f"{item['role']}: {item['message']}\n"
@@ -20,39 +24,50 @@ def route_query(user_query: str, username: str):
         {user_query}
         """
         logger.info(f"ENRICHED_QUERY={enriched_query}")
-        agent_response = agent_executor.invoke(
+        plan = create_plan(enriched_query)
+        if plan.tool_name == "customer_profile_tool" and not plan.customer_name:
+            raise ValueError("Planner selected customer_profile_tool but customer_name is missing")
+        if plan.tool_name == "issue_history_tool" and not plan.issue_id:
+            raise ValueError("Planner selected issue_history_tool but issue_id is missing")
+
+        tool_input = str(plan.customer_name) if plan.customer_name else str(plan.issue_id)
+        logger.info(f"PLAN={plan.model_dump()}")
+        add_trace(
             {
-                "input": enriched_query,
-                "username": username,
+                "type": "agent",
+                "username": user["username"],
+                "query": user_query,
+                "selected_tool": plan.tool_name,
+                "tool_input": tool_input,
             }
         )
-        tool_output = agent_response.get("output", "")
-        synthesis_prompt = f"""
-        Conversation History:
-        {history_text}
-        
-        User Question:
-        {user_query}
-        
-        Retrieved Enterprise Data:
-        {tool_output}
-        
-        TASK:
-        Generate a concise enterprise support response.
-        
-        Include:
-        - customer situation summary
-        - issue severity
-        - operational risks
-        - recommended next action
-        
-        Keep response professional
-        """
-
-        final_response = generate_response(synthesis_prompt)
-        save_message(username, "user", user_query)
-        save_message(username, "assistant", final_response)
+        tool_output = execute_plan(plan)
+        add_trace(
+            {
+                "type": "tool_execution",
+                "username": user["username"],
+                "tool_name": plan.tool_name,
+                "tool_output": str(tool_output)[:500]
+            }
+        )
+        add_trace(
+            {
+                "type": "skill",
+                "username": user["username"],
+                "selected_skill": plan.response_mode,
+            }
+        )
+        logger.info(f"SKILL_NAME={plan.response_mode}")
+        if plan.response_mode == "escalation":
+            final_response = EscalationSummarySkill.execute(user_query, tool_output, history_text)
+        else:
+            final_response = StandardResponseSkill.execute(user_query, tool_output, history_text)
+        save_message(user["username"], "user", user_query)
+        save_message(user["username"], "assistant", final_response)
         return final_response
+    except PlannerValidationError as e:
+        logger.error(f"PLANNER_ERROR={str(e)}", exc_info=True)
+        return "I could not confidently determine the customer or issue referenced in your request. Please provide additional details."
     except Exception as e:
         logger.error(f"AGENT_ERROR={str(e)}", exc_info=True)
         return {"error": str(e)}

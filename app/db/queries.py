@@ -68,3 +68,48 @@ def get_issue_updates(issue_id: int):
         return [dict(row) for row in results]
     finally:
         session.close()
+
+
+def create_next_action(issue_id: int, action_text: str, created_by: str):
+    session = SessionLocal()
+    try:
+        query = text("""
+                     INSERT INTO next_actions
+                     (issue_id,
+                      action_text,
+                      created_by)
+                     VALUES (:issue_id,
+                             :action_text,
+                             :created_by)
+                     RETURNING id
+                     """)
+        result = session.execute(
+            query,
+            {
+                "issue_id": issue_id,
+                "action_text": action_text,
+                "created_by": created_by
+            }
+        )
+        session.commit()
+        return result.scalar()
+    finally:
+        session.close()
+
+
+def get_next_actions(issue_id: int):
+    session = SessionLocal()
+    try:
+        query = text("""
+                     SELECT *
+                     FROM next_actions
+                     WHERE issue_id = :issue_id
+                     ORDER BY created_at DESC
+                     """)
+        results = session.execute(
+            query,
+            {"issue_id": issue_id}
+        ).mappings().all()
+        return [dict(r) for r in results]
+    finally:
+        session.close()

@@ -1,6 +1,8 @@
 services:
   api:
-    build: .
+    build:
+      context: .
+      dockerfile: app/Dockerfile
     container_name: acme-api
     restart: always
     ports:
@@ -9,7 +11,9 @@ services:
       - postgres
       - redis
       - keycloak
+      - mcp_server
     environment:
+      MCP_BASE_URL: http://mcp_server:8100
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
       OLLAMA_BASE_URL: http://host.docker.internal:11434
@@ -21,6 +25,23 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       GROQ_API_KEY: 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
+  mcp_server:
+    build:
+      context: .
+      dockerfile: mcp_server/Dockerfile
+    container_name: acme-mcp
+    ports:
+      - "8100:8100"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: acme
+      POSTGRES_HOST: postgres
+      POSTGRES_PASSWORD: acme123
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: acme
+
   postgres:
     image: postgres:16
     container_name: acme-postgres

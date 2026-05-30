@@ -1,17 +1,39 @@
 [
   {
+    "name": "Customer Lookup",
+    "username": "alice",
+    "roles": [
+      "sales_user"
+    ],
     "query": "Show open issues for Globex",
-    "expected_tool": "get_customer_profile",
-    "expected_role": "sales_user"
+    "expected_tool": "customer_profile_tool",
+    "expected_result_contains": "Globex"
   },
   {
-    "query": "Give escalation summary for Initech",
-    "expected_tool": "EscalationSummarySkill",
-    "expected_role": "support_user"
+    "name": "Issue History",
+    "username": "alice",
+    "roles": [
+      "sales_user"
+    ],
+    "query": "Show issue history for issue 1",
+    "expected_tool": "issue_history_tool"
   },
   {
-    "query": "Show open issues for Umbrella Logistics",
-    "expected_tool": "get_customer_profile",
-    "expected_role": "sales_user"
+    "name": "Escalation Analysis Allowed",
+    "username": "bob",
+    "roles": [
+      "support_user"
+    ],
+    "query": "How bad is Initech situation?",
+    "expected_tool": "escalation_summary_skill"
+  },
+  {
+    "name": "Escalation Analysis Denied",
+    "username": "alice",
+    "roles": [
+      "sales_user"
+    ],
+    "query": "How bad is Initech situation?",
+    "expected_error": "403"
   }
 ]

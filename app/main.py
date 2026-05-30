@@ -4,12 +4,15 @@ from pydantic import BaseModel
 from app.agent.router import route_query
 from app.auth.dependencies import get_current_user
 from app.auth.rbac import require_role
+from app.auth.user_context import current_user
 from app.observability.logger import logger
 from app.observability.middleware import LoggingMiddleware
+from app.observability.trace_store import get_traces
 from app.tools.customer_tools import get_customer_profile
 
 app = FastAPI()
 app.add_middleware(LoggingMiddleware)
+
 
 class ChatRequest(BaseModel):
     message: str
@@ -21,13 +24,15 @@ async def root():
 
 
 @app.post("/chat")
-def chat(
-        request: ChatRequest,
-        user=Depends(get_current_user)
-):
-    logger.info(f"user: {user}")
-    response = route_query(request.message, user["username"])
+def chat(request: ChatRequest, user=Depends(get_current_user)):
+    current_user.set(user)
+    response = route_query(request.message, user)
     return {"response": response}
+
+
+@app.get("/traces")
+def traces():
+    return {"traces": get_traces()}
 
 
 @app.get("/customer/{customer_name}")

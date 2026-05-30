@@ -1,5 +1,7 @@
+import pandas as pd
 import requests
 import streamlit as st
+from streamlit import sidebar
 
 st.set_page_config(
     page_title="Acme Enterprise Assistant",
@@ -33,6 +35,13 @@ with st.sidebar:
             st.success("Login successful")
         else:
             st.error("Login failed")
+    st.sidebar.markdown("---")
+    if st.sidebar.button("View Traces"):
+        response = requests.get(f"{API_BASE_URL}/traces")
+        traces = response.json()["traces"]
+        if traces:
+            st.subheader("Trace Dashboard")
+            st.dataframe(pd.DataFrame(traces))
 
 if st.session_state.token:
     st.subheader("Chat")
