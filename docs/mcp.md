@@ -14,13 +14,8 @@ Benefits:
 - Reduced coupling
 ---
 ## Architecture
-Planner
-↓
-Executor
-↓
-MCP Server
-↓
-PostgreSQL
+![MCP FLow](img.png)
+
 ---
 ## Available MCP Tools
 ### customer_profile_tool
@@ -33,9 +28,8 @@ Retrieves:
 - Issue details
 - Issue updates
 - Historical activity
-### create_next_action_tool
-Creates and stores issue follow-up actions.
-Restricted to authorized users.
+
+
 ---
 ## Why MCP Improves Enterprise Systems
 Enterprise environments often integrate with:

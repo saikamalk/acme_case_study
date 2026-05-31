@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlalchemy import text
 from app.db.connection import SessionLocal
 
@@ -111,5 +112,52 @@ def get_next_actions(issue_id: int):
             {"issue_id": issue_id}
         ).mappings().all()
         return [dict(r) for r in results]
+    finally:
+        session.close()
+
+def add_issue_update(issue_id: int, update_text: str):
+    session = SessionLocal()
+    try:
+        query = text("""
+                     INSERT INTO issue_updates(issue_id, update_text)
+                     VALUES (:issue_id, :update_text)
+                     RETURNING id
+                     """)
+        result = session.execute(
+            query,
+            {"issue_id": issue_id, "update_text": update_text}
+        )
+        session.commit()
+        return result.scalar()
+    finally:
+        session.close()
+
+def get_user_role(username: str):
+    session = SessionLocal()
+    try:
+        query = text("""
+                     SELECT username
+                     FROM users
+                     WHERE LOWER(username) = LOWER(:username)
+                     limit 1
+                     """)
+        result = session.execute(
+            query,
+            {"username": username}
+        ).mappings().first()
+        if not result:
+            raise HTTPException(status_code=404, detail="User not found in application database")
+
+        query = text("""
+                     SELECT role_name
+                     FROM user_roles
+                     WHERE LOWER(username) = LOWER(:username)
+                     limit 1
+                     """)
+        result = session.execute(
+            query,
+            {"username": username}
+        ).mappings().first()
+        return result["role_name"] if result else None
     finally:
         session.close()

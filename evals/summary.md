@@ -9,11 +9,12 @@ The test set covers:
 - Escalation workflow routing
 - Planner robustness
 - Error handling
-- Customer lookup variations
-The complete evaluation dataset is available in:
-- evals/eval_dataset.json
-The raw execution results are available in:
-- evals/results.json
+- Customer lookup variations 
+
+The complete evaluation dataset is available in: evals/test_cases.json
+
+The raw execution results are available in evals/results.json, and this summary provides the human-readable assessment commentary.
+
 ---
 ## Metrics Evaluated
 ### Tool Selection Accuracy

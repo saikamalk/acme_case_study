@@ -14,10 +14,7 @@ def save_message(username: str, role: str, message: str):
         "message": message
     })
     history = history[-10:]
-    redis_client.set(
-        key,
-        json.dumps(history)
-    )
+    redis_client.set(key,json.dumps(history))
 
 
 def get_conversation_history(username: str):
@@ -26,3 +23,10 @@ def get_conversation_history(username: str):
     if not existing:
         return []
     return json.loads(existing)
+
+def clear_conversation_history(username: str):
+    key = f"session:{username}"
+    redis_client.delete(key)
+    if redis_client.exists(key) == 0:
+        return "Conversation history cleared"
+    return "Conversation history not cleared"

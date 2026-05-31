@@ -7,7 +7,7 @@ class EscalationSummarySkill:
     @staticmethod
     def execute(user_query: str, customer_data: str, conversation_history: str):
         user = current_user.get()
-        authorize_tool("escalation_summary_skill", user["roles"])
+        authorize_tool("escalation_summary_skill", user)
         prompt = f"""
 You are an enterprise customer operations assistant.
 Conversation History:

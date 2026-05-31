@@ -10,7 +10,7 @@ from app.skills.standard_response import StandardResponseSkill
 
 def route_query(user_query: str, user: dict):
     try:
-        logger.info(f"USER_QUERY={user_query}")
+        logger.info(f"User Query:\n{user_query}")
         history = get_conversation_history(user["username"])
         history_text = ""
         for item in history:
@@ -23,15 +23,21 @@ def route_query(user_query: str, user: dict):
         Current User Query:
         {user_query}
         """
-        logger.info(f"ENRICHED_QUERY={enriched_query}")
+        logger.info(f"Enriched Query:\n{enriched_query}")
         plan = create_plan(enriched_query)
-        if plan.tool_name == "customer_profile_tool" and not plan.customer_name:
-            raise ValueError("Planner selected customer_profile_tool but customer_name is missing")
-        if plan.tool_name == "issue_history_tool" and not plan.issue_id:
-            raise ValueError("Planner selected issue_history_tool but issue_id is missing")
+        logger.info(f"Plan Created:\n{plan.model_dump()}")
 
-        tool_input = str(plan.customer_name) if plan.customer_name else str(plan.issue_id)
-        logger.info(f"PLAN={plan.model_dump()}")
+        if plan.customer_name:
+            tool_input = str(plan.customer_name)
+        elif plan.issue_id:
+            tool_input = str(plan.issue_id)
+        elif plan.action_text:
+            tool_input = str(plan.action_text)
+        elif plan.tool_input:
+            tool_input = str(plan.tool_input)
+        else:
+            tool_input = ""
+
         add_trace(
             {
                 "type": "agent",
@@ -42,6 +48,7 @@ def route_query(user_query: str, user: dict):
             }
         )
         tool_output = execute_plan(plan)
+        logger.info(f"Tool Output:\n{tool_output}")
         add_trace(
             {
                 "type": "tool_execution",
@@ -57,13 +64,14 @@ def route_query(user_query: str, user: dict):
                 "selected_skill": plan.response_mode,
             }
         )
-        logger.info(f"SKILL_NAME={plan.response_mode}")
+        logger.info(f"Skill selected:\n{plan.response_mode}")
         if plan.response_mode == "escalation":
             final_response = EscalationSummarySkill.execute(user_query, tool_output, history_text)
         else:
             final_response = StandardResponseSkill.execute(user_query, tool_output, history_text)
         save_message(user["username"], "user", user_query)
         save_message(user["username"], "assistant", final_response)
+        logger.info(f"Final Response:\n{final_response}")
         return final_response
     except PlannerValidationError as e:
         logger.error(f"PLANNER_ERROR={str(e)}", exc_info=True)

@@ -33,12 +33,25 @@ Durable store for:
 - issues
 - issue_updates
 - next_actions
+- user_roles
+
+The application uses PostgreSQL as the source of truth for application-level authorization.
+
+After Keycloak authenticates a user and validates the JWT, the application retrieves the user's roles from the user_roles table and enforces RBAC based on the database role.
+
+This allows application permissions to be managed independently from the identity provider.
 
 ### Redis
 Stores short-term conversation history and session memory.
 
 ### Keycloak
-Authentication provider and role management.
+Authentication provider.
+
+The application validates JWT tokens using Keycloak's OpenID Connect discovery endpoint and JWS keys.
+
+Keycloak is responsible for authentication and identity verification.
+
+Application authorization is enforced using roles stored in PostgreSQL.
 
 ### MCP Server
 Decouples tool definitions from core agent logic.
@@ -63,6 +76,13 @@ Retrieves issue history and updates.
 ### create_next_action_tool
 Creates recommended next actions for issues.
 
+### add_issue_update_tool
+Adds operational updates to an existing issue.
+
+Accessible by:
+- support_user
+- admin
+
 ## Skills
 
 ### Escalation Summary Skill
@@ -76,11 +96,15 @@ Outputs:
 
 ## Authentication & RBAC
 
-| Role | Permissions |
-|------|-------------|
-| sales_user | Read-only customer and issue access |
-| support_user | Read and issue workflow access |
-| admin | Full access including next actions |
+| Role | Permissions                                                   |
+|------|---------------------------------------------------------------|
+| sales_user | Read-only customer and issue access                           |
+| support_user | Read access plus ability to add issue updates                 |
+| admin | Full access including issue updates and next actions creation |
+
+Authentication is handled by Keycloak
+
+Authorization is enforced by PostgreSQL user_roles mappings loaded during request processing.
 
 ## Redis Usage
 
@@ -100,6 +124,8 @@ MCP provides:
 Includes:
 
 - Request logs
+- Request ID
+- Trace ID
 - Error logs
 - Tool execution traces
 - Latency tracking
@@ -125,6 +151,8 @@ Services:
 - Summarise the history of issue 3.
 - Create a next action for issue 5.
 - How bad is the Initech situation?
+- Add update to issue 3 saying vendor confirmed root cause.
+- Record that issue 5 has been fixed and validated.
 
 ## Evaluation
 
@@ -137,8 +165,9 @@ Evaluation covers:
 
 Artifacts:
 
-- evals/eval_dataset.json
-- evals/results.md
+- [evals/test_cases.json](evals/test_cases.json)
+- [evals/results.json](evals/results.json)
+- [evals/summary.md](evals/summary.md)
 
 ## Trade-offs
 
@@ -149,11 +178,10 @@ Current implementation favors simplicity and local execution:
 - Local container stack
 
 Future improvements:
-
-- JWKS-based JWT verification
 - OpenTelemetry integration
 - Persistent trace storage
 - Expanded tool catalog
+- Automated evalution pipeline
 
 ## AI Tool Usage
 

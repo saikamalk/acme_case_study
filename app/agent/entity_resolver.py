@@ -7,7 +7,9 @@ from app.observability.logger import logger
 
 
 def resolve_customer_name(user_query: str):
+    logger.info(f"Resolve Customer Name: {user_query}")
     customers = get_all_customers()
+    logger.info(f"Customers Available: {customers}")
     prompt = f"""
    User Query:
    {user_query}
@@ -34,6 +36,7 @@ def resolve_customer_name(user_query: str):
         response = generate_response(prompt)
         parsed = json.loads(response)
         validated = CustomerResolutionResponse(**parsed)
+        logger.info(f"Resolved Customer Name: {validated.customer_name}")
         return validated.customer_name
     except Exception as e:
         logger.error(e, exc_info=True)

@@ -118,7 +118,7 @@
     "roles": [
       "sales_user"
     ],
-    "query": "How bad is Globex's situation?",
+    "query": "Can you summarize stark's situation?",
     "expected_error": "403"
   },
   {
@@ -252,7 +252,22 @@
     "conversation": [
       "Show open issues for Globex"
     ],
-    "query": "How serious are they?",
+    "query": "what is their current status",
     "expected_tool": "customer_profile_tool"
+  },
+  {
+    "name": "Support User Add Issue Update",
+    "username": "bob",
+    "roles": ["support_user"],
+    "query": "Add update to issue 1 saying engineering deployed hotfix",
+    "expected_tool": "add_issue_update_tool"
+  },
+  {
+    "name": "Sales User Add Issue Update Forbidden",
+    "username": "alice",
+    "roles": ["support_user"],
+    "query": "Add update to issue 1 saying engineering deployed hotfix",
+    "expected_error": "403"
   }
+
 ]
