@@ -136,23 +136,12 @@ def get_user_role(username: str):
     session = SessionLocal()
     try:
         query = text("""
-                     SELECT username
-                     FROM users
-                     WHERE LOWER(username) = LOWER(:username)
-                     limit 1
-                     """)
-        result = session.execute(
-            query,
-            {"username": username}
-        ).mappings().first()
-        if not result:
-            raise HTTPException(status_code=404, detail="User not found in application database")
-
-        query = text("""
                      SELECT role_name
-                     FROM user_roles
-                     WHERE LOWER(username) = LOWER(:username)
-                     limit 1
+                     FROM users u 
+                         JOIN user_roles ur 
+                         ON LOWER(u.username) = LOWER(ur.username)
+                     WHERE LOWER(u.username) = LOWER(:username)
+                     LIMIT 1
                      """)
         result = session.execute(
             query,

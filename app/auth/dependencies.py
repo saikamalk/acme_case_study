@@ -24,7 +24,7 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
         logger.info(f"User {username} configured for role {app_role}")
         return {
             "username": username,
-            "roles": roles,
+            "roles": [app_role],
             "raw_payload": payload,
         }
     except JWTError as e:

@@ -265,7 +265,7 @@
   {
     "name": "Sales User Add Issue Update Forbidden",
     "username": "alice",
-    "roles": ["support_user"],
+    "roles": ["sales_user"],
     "query": "Add update to issue 1 saying engineering deployed hotfix",
     "expected_error": "403"
   }
