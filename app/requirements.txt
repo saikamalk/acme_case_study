@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+requests
+psycopg2
+sqlalchemy
+redis
+python-dotenv
+python-jose
+httpx
+mcp
+groq==0.37.1

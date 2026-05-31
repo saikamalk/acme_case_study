@@ -66,7 +66,7 @@ async def route_query_async(user_query: str, user: dict):
                 "selected_skill": plan.response_mode,
             }
         )
-        logger.info(f"Skill selected:\n{plan.response_mode}")
+        logger.info(f"Skill selected: {plan.response_mode}")
         if plan.response_mode == "escalation":
             final_response = await asyncio.to_thread(
                 EscalationSummarySkill.execute,
@@ -78,6 +78,7 @@ async def route_query_async(user_query: str, user: dict):
                 user_query, tool_output, history_text
             )
         await asyncio.to_thread(save_message, user["username"], "user", user_query)
+        await asyncio.to_thread(save_message, user["username"], f"{plan.tool_name} output", tool_output)
         await asyncio.to_thread(save_message, user["username"], "assistant", final_response)
         logger.info(f"Final Response:\n{final_response}")
         return final_response

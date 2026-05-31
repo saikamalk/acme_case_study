@@ -1,7 +1,7 @@
 import os
 import time
-from functools import lru_cache
-from typing import Any, Dict, Optional
+from typing import Any, Dict
+
 import requests
 from jose import jwt
 from jose.exceptions import JWTError

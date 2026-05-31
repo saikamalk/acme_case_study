@@ -1,6 +1,5 @@
-from fastapi import HTTPException
 from sqlalchemy import text
-from app.db.connection import SessionLocal
+from mcp_server.db.connection import SessionLocal
 
 
 def get_all_customers():

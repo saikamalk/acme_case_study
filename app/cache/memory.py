@@ -1,6 +1,9 @@
 import json
+import os
+
 from app.cache.redis_client import redis_client
 
+SESSION_TTL_SECONDS = int(os.getenv("SESSION_TTL_SECONDS"))
 
 def save_message(username: str, role: str, message: str):
     key = f"session:{username}"
@@ -14,7 +17,7 @@ def save_message(username: str, role: str, message: str):
         "message": message
     })
     history = history[-10:]
-    redis_client.set(key,json.dumps(history))
+    redis_client.set(key,json.dumps(history), ex=SESSION_TTL_SECONDS)
 
 
 def get_conversation_history(username: str):

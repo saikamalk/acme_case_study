@@ -3,8 +3,8 @@ from typing import Any
 
 from mcp.server.fastmcp import FastMCP
 
-from app.db.queries import add_issue_update, create_next_action, get_issue_updates
-from app.services.customer_service import CustomerService
+from mcp_server.db.queries import add_issue_update, create_next_action, get_issue_updates
+from mcp_server.services.customer_service import CustomerService
 
 mcp = FastMCP(
     "Acme Operations MCP",

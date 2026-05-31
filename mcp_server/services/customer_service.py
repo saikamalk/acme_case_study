@@ -1,4 +1,4 @@
-from app.db.queries import (
+from mcp_server.db.queries import (
     get_customer_by_name,
     get_open_issues,
     get_issue_updates

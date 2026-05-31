@@ -2,7 +2,7 @@ import json
 
 from app.agent.llm import generate_response
 from app.agent.models import CustomerResolutionResponse
-from app.db.queries import get_all_customers
+from mcp_server.db.queries import get_all_customers
 from app.observability.logger import logger
 
 

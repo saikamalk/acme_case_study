@@ -25,36 +25,60 @@ def _build_prompt(user_query: str, feedback: str = ""):
     Tool Descriptions:
 
     customer_profile_tool:
-    - customer information
-    - customer profile
-    - open issues
-    - customer health
-    - company status
-    - escalation review
-    - question about customers
-
+        - customer information
+        - customer profile
+        - open issues
+        - customer health
+        - company status
+        - customer situation
+        - escalation review
+        - customer analysis
+        - operational summaries
+        - customer summaries
+        - executive reviews
+        - questions about customers
     issue_history_tool:
-    - issue history
-    - issue updates
-    - issue timeline
-    - issue progress
-    
+        - issue history
+        - issue updates
+        - issue timeline
+        - issue progress
+        - issue details
+        - issue investigation
     create_next_action_tool:
-    - create next action
-    - save next action
-    - persist recommendation
-    - admin only
+        - create next action
+        - save next action
+        - record next action
+        - persist recommendation
+        - persist follow-up action
+        - create future action
+        - admin only
+    
+    IMPORTANT:
+    This tool is ONLY for creating and storing a next action.
+    
+    DO NOT use create_next_action_tool for:
+        - risk assessments
+        - executive summaries
+        - escalation reviews
+        - customer situation analysis
+        - severity analysis
+        - recommendation generation
+        - "what should we do next"
+        - "how bad is this situation"
+    Those requests should use customer_profile_tool with response_mode="escalation".
     
     add_issue_update_tool:
-    - add update to issue
-    - append note to issue
-    - record progress on issue
-    - support_user and admin only
-    - modifies issue history
-
-    IMPORTANT:
-
+        - add update to issue
+        - append note to issue
+        - record progress on issue
+        - record issue update
+        - support_user and admin only
+        - modifies issue history
+    
+    IMPORTANT TOOL SELECTION RULES
+    
     Use issue_history_tool ONLY when a specific issue identifier is referenced.
+    
     Examples:
     
     "show history for issue 5"
@@ -63,17 +87,53 @@ def _build_prompt(user_query: str, feedback: str = ""):
     "show updates for issue 3"
     -> issue_history_tool
 
+    "what is issue 5"
+    -> issue_history_tool
+    
+    "review issue 10"
+    -> issue_history_tool
+    ------------------------------------------------------
+    Use customer_profile_tool for customer-level requests.
+    
+    Examples:
+    
     "what is happening with globex"
-    -> customer_profile_tool
-
-    "how bad is initech situation"
     -> customer_profile_tool
 
     "show open issues for globex"
     -> customer_profile_tool
     
+    "show customer status for initech"
+    -> customer_profile_tool
+    
+    "summarize globex"
+    -> customer_profile_tool
+    
+    "summarize open issues for initech"
+    -> customer_profile_tool
+    
+    "how bad is initech situation"
+    -> customer_profile_tool
+
+    "give executive summary for globex"
+    -> customer_profile_tool
+    
+    Use create_next_action_tool ONLY when the user explicitly wants a next action to be CREATED, SAVED, RECORDED, or PERSISTED.
+    
+    Examples:
+    
     "create next action for issue 10"
     -> create_next_action_tool
+    
+    "save a follow-up action for issue 3"
+    -> create_next_action_tool
+    
+    "record next step for issue 5"
+    -> create_next_action_tool
+    ------------------------------------------------------
+    Use add_issue_update_tool ONLY when the user wants to modify issue history.
+    
+    Examples:
     
     "add update to issue 3 saying vendor confirmed root cause"
     -> add_issue_update_tool
@@ -81,104 +141,135 @@ def _build_prompt(user_query: str, feedback: str = ""):
     "record that issue 5 has been fixed"
     -> add_issue_update_tool
     
-    "update issue 2 with not customer approved workaround"
+    "update issue 2 with note customer approved workaround"
     -> add_issue_update_tool
     
-    "add note to issue 4 that engineering deploy hotfix:
+    "add note to issue 4 that engineering deployed hotfix"
     -> add_issue_update_tool
-    
-    "what is issue 5"
-    -> issue_history_tool
+    ------------------------------------------------------
 
-    You must also determine the response_mode.
-    
+    You must also determine response_mode.
     response_mode = "standard" for:
-    - customer lookups
-    - customer profiles
-    - open issues
-    - issue history
-    - issue timelines
-    - issue updates
-    - status retrieval
-    - factual summaries
-    - operational summaries
-    - issue summaries
-    - customer summaries
-    
-    response_mode = "escalation" ONLY when the user explicitly asks for:
-    - risk assessment
-    - severity assessment
-    - executive summary
-    - escalation analysis
-    - customer situation analysis
-    - management reporting
-    - recommended next action
-    - recommendation generation
-    - missing information analysis
-    
+        - customer lookups
+        - customer profiles
+        - open issues
+        - issue history
+        - issue timelines
+        - issue updates
+        - factual summaries
+        - operational summaries
+        - issue summaries
+        - customer summaries
+        - status retrieval
+    response_mode = "escalation" ONLY when the user explicitly requests:
+        - risk assessment
+        - severity assessment
+        - executive summary
+        - escalation analysis
+        - customer situation analysis
+        - management reporting
+        - recommendation generation
+        - recommended next action analysis
+        - missing information analysis
     IMPORTANT:
-    
     The words:
-    - summarize
-    - summary
-    - summarize issues
-    - summarize open issues
-    - summarize issue history
+        - summarize
+        - summary
+        - summarize issues
+        - summarize open issues
+        - summarize issue history
     
     DO NOT automatically imply escalation mode.
     
-    Issue summaries and customer summaries should normally use:
+    Issue summaries and customer summaries normally use:
     response_mode = "standard"
+    ------------------------------------------------------
+    ESCALATION EXAMPLES
     
-    Use escalation mode only when the user explicitly requests analysis, risk, recommendations, executive reporting, or escalation review.
-
+    User:
+    "How bad is the Initech situation?"
+    
+    Output:
+    {{
+    "tool_name": "customer_profile_tool",
+    "customer_name": "Initech",
+    "response_mode": "escalation"
+    }}
+    
+    User:
+    "Give me an executive summary of Globex"
+    
+    Output:
+    {{
+    "tool_name": "customer_profile_tool",
+    "customer_name": "Globex",
+    "response_mode": "escalation"
+    }}
+    
+    User:
+    "What risks exist for Acme Corp?"
+    
+    Output:
+    {{
+    "tool_name": "customer_profile_tool",
+    "customer_name": "Acme Corp",
+    "response_mode": "escalation"
+    }}
+    ------------------------------------------------------
+    IMPORTANT SAFETY RULE
+    
+    If response_mode = "escalation":
+    
+    NEVER select:
+        - create_next_action_tool
+        - add_issue_update_tool
+    Escalation mode is for ANALYSIS.
+    
+    Tools that modify data are only used when the user explicitly asks to create or update records.
+    
     {feedback}
-
+    
     Return ONLY a JSON object.
     
-    IMPORTANT:
-    Use issue_history_tool when the user is asking to VIEW, SHOW, DISPLAY, CHECK, GET or REVIEW issue history.
-    Use add_issue_update_tool when the user is asking to ADD, UPDATE, RECORD, APPEND, SAVE or NOTE information on an issue.
-    Use create_next_action_tool only when the user wants a future action to be created.
-
-    Valid examples:
-    {{
-       "tool_name": "customer_profile_tool",
-       "customer_name": "Globex",
-       "response_mode": "standard"
-    }}
-
-    {{
-       "tool_name": "customer_profile_tool",
-       "customer_name": "Initech",
-       "response_mode": "escalation"
-    }}
-
-    {{
-        "tool_name": "issue_history_tool",
-        "issue_id": 1,
-        "response_mode": "standard"
-    }}
-    
-    {{
-        "tool_name": "create_next_action_tool",
-        "issue_id": 1,
-        "action_text": "Escalate to infrastructure team within 24 hours",
-        "response_mode": "standard"
-    }}
-    
-    {{
-        "tool_name": "add_issue_update_tool",
-        "issue_id": 3
-        "update_text": "Vendor confirmed root cause",
-        "response_mode": "standard"
-    }}
-    
     Every response MUST contain:
-    - tool_name
-    - response_mode
+        - tool_name
+        - response_mode
     
-    Do not omit fields.
+    Do not omit required fields.
+    
+    Valid examples:
+    
+    {{
+    "tool_name": "customer_profile_tool",
+    "customer_name": "Globex",
+    "response_mode": "standard"
+    }}
+    
+    {{
+    "tool_name": "customer_profile_tool",
+    "customer_name": "Initech",
+    "response_mode": "escalation"
+    }}
+    
+    {{
+    "tool_name": "issue_history_tool",
+    "issue_id": 1,
+    "response_mode": "standard"
+    }}
+    
+    {{
+    "tool_name": "create_next_action_tool",
+    "issue_id": 1,
+    "action_text": "Escalate to infrastructure team within 24 hours",
+    "response_mode": "standard"
+    }}
+    
+    {{
+    "tool_name": "add_issue_update_tool",
+    "issue_id": 3,
+    "update_text": "Vendor confirmed root cause",
+    "response_mode": "standard"
+    }}
     """
 
 

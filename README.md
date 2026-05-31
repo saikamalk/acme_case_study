@@ -251,6 +251,17 @@ Captured signals include:
 
 These capabilities allow operators to understand how the agent reached a response and diagnose failures during execution.
 
+### Custom Trace Viewer
+A lightweight trace viewer is available through the Streamlit UI.
+
+The viewer provides visibility into:
+- Planner decisions
+- MCP tool executions
+- Skill selection
+- Tool usage statistics
+
+- This enables end-to-end inspection of how the assistant generated a response and serves as a lightweight custom trace viewer for agent execution analysis.
+
 ## Running Locally
 
 ```bash

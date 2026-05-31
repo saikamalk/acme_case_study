@@ -7,7 +7,6 @@ services:
     ports:
       - "8501:8501"
     depends_on:
-      - keycloak
       - api
   api:
     build:
@@ -18,8 +17,6 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - postgres
-      - redis
       - keycloak
       - mcp_server
     environment:
@@ -36,6 +33,7 @@ services:
       POSTGRES_USER: acme
       REDIS_HOST: redis
       REDIS_PORT: 6379
+      SESSION_TTL_SECONDS: 86400
       GROQ_API_KEY: ${GROQ_API_KEY}
   mcp_server:
     build:
@@ -45,7 +43,10 @@ services:
     ports:
       - "8100:8100"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     restart: unless-stopped
     environment:
       POSTGRES_DB: acme
@@ -60,6 +61,11 @@ services:
     image: postgres:16
     container_name: acme-postgres
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U acme"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     environment:
       POSTGRES_DB: acme
       POSTGRES_USER: acme
@@ -74,8 +80,13 @@ services:
     restart: always
     ports:
       - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   keycloak:
-    image: quay.io/keycloak/keycloak:latest
+    image: quay.io/keycloak/keycloak:26.6.2
     container_name: acme-keycloak
     command: start-dev --import-realm
     restart: always
