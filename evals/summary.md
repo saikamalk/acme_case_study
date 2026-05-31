@@ -22,6 +22,7 @@ Validates that the planner chooses the correct tool based on user intent.
 Examples:
 - customer_profile_tool
 - issue_history_tool
+- add_issue_update_tool
 - create_next_action_tool
 ### Response Mode Selection
 Validates correct routing between:
@@ -39,6 +40,7 @@ Validates:
 - authorization failures
 ### Planner Robustness
 Validates natural language variations and indirect phrasing.
+
 ---
 ## Evaluation Result
 | Metric | Result |
