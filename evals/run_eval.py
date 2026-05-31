@@ -20,7 +20,7 @@ DENIAL_PATTERNS = [
 NOT_FOUND_PATTERNS = [
     "not found",
     "could not find",
-    "couldn't find"
+    "couldn't find",
     "no customer",
     "no issue",
     "no history",
