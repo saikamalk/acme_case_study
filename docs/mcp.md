@@ -14,7 +14,7 @@ Benefits:
 - Reduced coupling
 ---
 ## Architecture
-![MCP FLow](img.png)
+![MCP FLow](mcp_flow.png)
 
 ---
 ## Available MCP Tools
