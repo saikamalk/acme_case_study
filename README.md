@@ -9,7 +9,7 @@ The solution demonstrates a realistic enterprise architecture that combines:
 - PostgreSQL-backed authorization and operational data
 - Redis conversation memory
 - LLM-driven planning and tool selection
-- MCP-based tool integration
+- Official MCP (Model Context Protocol) integration
 - Reusable AI skills
 - Evaluation and observability
 - End-to-end Docker Compose deployment
@@ -38,7 +38,7 @@ The solution is composed of several independently deployable services that work 
 - Keycloak provides authentication and identity verification.
 - PostgreSQL stores operational data and application authorization roles.
 - Redis stores short-term conversation memory.
-- The MCP server exposes enterprise tools through a separate service boundary.
+- The MCP server exposes enterprise tools using the official Model Context Protocol (MCP) SDK, allowing tool discovery and invocation through a standardized protocol.
 
 The agent follows a planner-executor pattern. The planner uses an LLM to determine the appropriate tool and response mode, while the executor invokes the selected tool, applies authorization checks, and passes structured data to reusable skills for response generation.
 
@@ -50,11 +50,12 @@ The interaction lifecycle follows the sequence below:
 2. FastAPI validates the JWT and loads the user's application role.
 3. Conversation history is loaded from Redis.
 4. The planner determines the appropriate tool and response mode.
-5. Tool-level authorization is performed.
-6. Enterprise data is retrieved from PostgreSQL.
-7. A reusable skill generates the final response.
-8. Traces and logs are recorded.
-9. The response is returned to the user.
+5. Executor invokes tool through MCP
+6. Tool-level authorization is performed.
+7. Enterprise data is retrieved from PostgreSQL.
+8. A reusable skill generates the final response.
+9. Traces and logs are recorded.
+10. The response is returned to the user.
 
 This flow ensures responses remain grounded in enterprise data while maintaining security, auditability, and role-based access control.
 
@@ -129,8 +130,8 @@ The MCP server exposes enterprise tools through a dedicated service boundary.
 The agent interacts with tools through the MCP layer rather than embedding business integrations directly inside planner logic.
 
 Benefits include:
-- Separation of concerns
-- Independent tool evolution
+- Standards-based MCP tool discovery
+- Standards-based MCP tool invocation
 - Reusable integrations
 - Simplified agent architecture
 - Easier future integrations with enterprise systems
@@ -217,18 +218,24 @@ PostgreSQL is reserved for durable operational data, while Redis handles ephemer
 
 ## MCP Usage
 
-The MCP server provides a standardized interface for enterprise tools.
+The solution uses the official Model Context Protocol (MCP) Python SDK to expose enterprise tools through a dedicated MCP server.
 
-Benefits include:
-- Decoupling tool implementations from agent logic
-- Independent deployment of tools
-- Simplified integration of future systems
-- Reusable enterprise capabilities
+The FastAPI application acts as an MCP client, while the MCP service acts as an MCP server responsible for tool discovery and tool execution.
 
-Without MCP, the planner would require direct knowledge of individual tool implementations.
+Available enterprise tools are exposed through MCP rather than being directly coupled to the agent implementation. This allows the planner and executor to remain independent of individual tool implementations and provides a standardized interface for future integrations.
 
-With MCP, the planner only needs to understand tool contracts, improving maintainability and extensibility.
+Benefits of this approach include:
+- Standardized tool discovery
+- Standardized tool invocation
+- Separation of tool implementations from agent orchestration
+- Independent evolution of enterprise integrations
+- Improved maintainability and extensibility
+- Compatibility with MCP-based ecosystems
 
+The agent uses MCP to invoke enterprise capabilities such as customer profile retrieval, issue history retrieval, issue updates, and next action creation. New tools can be added to the MCP server without requiring changes to the core planning workflow.
+
+This demonstrates how enterprise systems can be integrated through a standards-based protocol while keeping agent orchestration logic clean, reusable, and maintainable.
+ 
 ## Observability
 The platform includes basic observability features to support debugging and operational visibility.
 
@@ -298,7 +305,7 @@ The following simplifications were intentionally made:
 
 ### Observability
 
-Traces are currently stored in memory and exposed through a lightweight trace endpoint.
+Traces are currently stored in memory and exposed through a lightweight trace endpoint. Trace inspection is restricted to administrators because traces may contain operational metadata.
 
 Production alternatives:
 - OpenTelemetry
@@ -361,24 +368,24 @@ README.md
 ```
 
 ## Assessment Requirement Mapping
-| Assessment Requirement | Implementation |
-|------------------------|----------------|
-| Keycloak Authentication | Keycloak container with JWT validation using OpenID Connect discovery and JWKS public keys |
-| Role-Based Access Control (RBAC) | PostgreSQL-backed application roles stored in `users` and `user_roles` tables |
-| PostgreSQL | Durable storage for customers, issues, issue updates, next actions, users, and user roles |
-| Redis Memory | Conversation history and short-term session memory |
-| Agentic Tool Selection | LLM-powered planner dynamically selects tools based on user intent |
-| Customer Profile Retrieval | `customer_profile_tool` retrieves customer information and open issues |
-| Issue History Retrieval | `issue_history_tool` retrieves issue updates and issue timelines |
-| Next Action Creation | `create_next_action_tool` creates recommended next actions for issues |
-| Issue Updates | `add_issue_update_tool` records operational updates on existing issues |
-| MCP Integration | Dedicated MCP server exposing enterprise tools through a separate service boundary |
+| Assessment Requirement | Implementation                                                                                                     |
+|------------------------|--------------------------------------------------------------------------------------------------------------------|
+| Keycloak Authentication | Keycloak container with JWT validation using OpenID Connect discovery and JWKS public keys                         |
+| Role-Based Access Control (RBAC) | PostgreSQL-backed application roles stored in `users` and `user_roles` tables                                      |
+| PostgreSQL | Durable storage for customers, issues, issue updates, next actions, users, and user roles                          |
+| Redis Memory | Conversation history and short-term session memory                                                                 |
+| Agentic Tool Selection | LLM-powered planner dynamically selects tools based on user intent                                                 |
+| Customer Profile Retrieval | `customer_profile_tool` retrieves customer information and open issues                                             |
+| Issue History Retrieval | `issue_history_tool` retrieves issue updates and issue timelines                                                   |
+| Next Action Creation | `create_next_action_tool` creates recommended next actions for issues                                              |
+| Issue Updates | `add_issue_update_tool` records operational updates on existing issues                                             |
+| MCP Integration | Official MCP server and MCP client implemented using the MCP python SDK for tool discovery and invocation          |
 | Reusable Skill | Escalation Summary Skill generates executive summaries, risk assessments, recommendations, and missing information |
-| Evaluation Framework | `evals/test_cases.json`, `evals/results.json`, and `evals/summary.md` |
-| Observability | Request logging, trace IDs, tool execution traces, error logs, and latency tracking |
-| Docker Compose Deployment | FastAPI, PostgreSQL, Redis, Keycloak, MCP Server, and Streamlit UI deployed via Docker Compose |
-| Streamlit UI | Simple user interface for interacting with the assistant |
-| Sample Enterprise Data | Seeded customers, issues, issue updates, next actions, users, and role mappings |
+| Evaluation Framework | `evals/test_cases.json`, `evals/results.json`, and `evals/summary.md`                                              |
+| Observability | Request logging, trace IDs, tool execution traces, error logs, and latency tracking                                |
+| Docker Compose Deployment | FastAPI, PostgreSQL, Redis, Keycloak, MCP Server, and Streamlit UI deployed via Docker Compose                     |
+| Streamlit UI | Simple user interface for interacting with the assistant                                                           |
+| Sample Enterprise Data | Seeded customers, issues, issue updates, next actions, users, and role mappings                                    |
 
 ### Assessment Coverage Summary
 This implementation satisfies all mandatory assessment requirements:
@@ -414,7 +421,8 @@ This implementation satisfies all mandatory assessment requirements:
 ### Infrastructure
 - Redis memory works
 - PostgreSQL queries work
-- MCP server reachable
+- MCP server discovery works
+- MCP tool invocation works
 
 ### Observability
 - Traces visible

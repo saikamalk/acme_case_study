@@ -23,6 +23,7 @@ NOT_FOUND_PATTERNS = [
     "couldn't find",
     "no customer",
     "no issue",
+    "no data",
     "no history",
     "no information",
     "unknown customer",

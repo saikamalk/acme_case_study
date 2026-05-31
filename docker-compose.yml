@@ -53,6 +53,8 @@ services:
       POSTGRES_PASSWORD: acme123
       POSTGRES_PORT: 5432
       POSTGRES_USER: acme
+      MCP_HOST: 0.0.0.0
+      MCP_PORT: 8100
 
   postgres:
     image: postgres:16

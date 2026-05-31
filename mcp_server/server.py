@@ -1,36 +1,62 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
-from app.tools.customer_tools import get_customer_profile
-from app.db.queries import get_issue_updates
+import os
+from typing import Any
 
-app = FastAPI()
+from mcp.server.fastmcp import FastMCP
+
+from app.db.queries import add_issue_update, create_next_action, get_issue_updates
+from app.services.customer_service import CustomerService
+
+mcp = FastMCP(
+    "Acme Operations MCP",
+    json_response=True,
+    stateless_http=True,
+    host=os.getenv("MCP_HOST"),
+    port=int(os.getenv("MCP_PORT")),
+)
 
 
-class ToolRequest(BaseModel):
-    input: str
+@mcp.tool()
+def customer_profile_tool(customer_name: str) -> dict[str, Any]:
+    profile = CustomerService.fetch_customer_profile(customer_name)
+    if not profile:
+        return {
+            "error": "Customer not found",
+            "customer_name": customer_name,
+        }
+    return profile
 
 
-@app.get("/tools")
-def list_tools():
+@mcp.tool()
+def issue_history_tool(issue_id: int) -> list[dict[str, Any]] | dict[str, Any]:
+    updates = get_issue_updates(issue_id)
+    if not updates:
+        return {
+            "error": "Issue not found or no history available",
+            "issue_id": issue_id,
+        }
+    return updates
+
+
+@mcp.tool()
+def add_issue_update_tool(issue_id: int, update_text: str) -> dict[str, Any]:
+    update_id = add_issue_update(issue_id, update_text)
     return {
-        "tools": [
-            {
-                "name": "customer_profile_tool",
-                "description": "Retrieve customer profile and open issues"
-            },
-            {
-                "name": "issue_history_tool",
-                "description": "Retrieve issue update history"
-            }
-        ]
+        "status": "created",
+        "update_id": update_id,
     }
 
 
-@app.post("/execute/customer_profile_tool")
-def execute_customer_profile(request: ToolRequest):
-    return get_customer_profile(request.input)
+@mcp.tool()
+def create_next_action_tool(
+        issue_id: int,
+        action_text: str,
+        created_by: str,
+) -> dict[str, Any]:
+    action_id = create_next_action(issue_id, action_text, created_by)
+    return {
+        "status": "created",
+        "action_id": action_id,
+    }
 
 
-@app.post("/execute/issue_history_tool")
-def execute_issue_history(request: ToolRequest):
-    return get_issue_updates(int(request.input))
+app = mcp.streamable_http_app()

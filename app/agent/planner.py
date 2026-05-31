@@ -1,7 +1,5 @@
-import json
-
 from app.agent.exceptions import PlannerValidationError
-from app.agent.llm import generate_response, generate_plan
+from app.agent.llm import generate_plan
 from app.agent.models import ToolPlan
 from app.observability.logger import logger
 
@@ -56,10 +54,8 @@ def _build_prompt(user_query: str, feedback: str = ""):
 
     IMPORTANT:
 
-    Use issue_history_tool ONLY when the query contains a specific issue id.
+    Use issue_history_tool ONLY when a specific issue identifier is referenced.
     Examples:
-    "show issues"
-    -> issue_history_tool
     
     "show history for issue 5"
     -> issue_history_tool
@@ -94,24 +90,47 @@ def _build_prompt(user_query: str, feedback: str = ""):
     "what is issue 5"
     -> issue_history_tool
 
-    You must also determine the response mode.
-
-    response_mode values:
-
-    standard
-    - customer lookup
-    - issue lookup
-    - status retrieval
-    - factual responses
+    You must also determine the response_mode.
+    
+    response_mode = "standard" for:
+    - customer lookups
+    - customer profiles
     - open issues
-
-    escalation
+    - issue history
+    - issue timelines
+    - issue updates
+    - status retrieval
+    - factual summaries
+    - operational summaries
+    - issue summaries
+    - customer summaries
+    
+    response_mode = "escalation" ONLY when the user explicitly asks for:
     - risk assessment
-    - customer health
+    - severity assessment
     - executive summary
-    - severity analysis
-    - recommendations
+    - escalation analysis
+    - customer situation analysis
     - management reporting
+    - recommended next action
+    - recommendation generation
+    - missing information analysis
+    
+    IMPORTANT:
+    
+    The words:
+    - summarize
+    - summary
+    - summarize issues
+    - summarize open issues
+    - summarize issue history
+    
+    DO NOT automatically imply escalation mode.
+    
+    Issue summaries and customer summaries should normally use:
+    response_mode = "standard"
+    
+    Use escalation mode only when the user explicitly requests analysis, risk, recommendations, executive reporting, or escalation review.
 
     {feedback}
 
@@ -126,7 +145,7 @@ def _build_prompt(user_query: str, feedback: str = ""):
     {{
        "tool_name": "customer_profile_tool",
        "customer_name": "Globex",
-       "response_mode": "standard
+       "response_mode": "standard"
     }}
 
     {{

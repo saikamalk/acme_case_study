@@ -34,13 +34,35 @@ with st.sidebar:
             st.success("Login successful")
         else:
             st.error("Login failed")
+
+    headers = {
+        "Authorization": f"Bearer {st.session_state.token}"
+    }
+    if st.sidebar.button("Logout"):
+        st.session_state.token = None
+        st.rerun()
+    if st.sidebar.button("Clear Conversation"):
+        response = requests.delete(
+            f"{API_BASE_URL}/clear_user_cache",
+            headers=headers
+        )
+        if response.status_code == 200:
+            st.success("Conversation cleared")
+        else:
+            st.error(response.text)
     st.sidebar.markdown("---")
     if st.sidebar.button("View Traces"):
-        response = requests.get(f"{API_BASE_URL}/traces")
-        traces = response.json()["traces"]
-        if traces:
-            st.subheader("Trace Dashboard")
-            st.dataframe(pd.DataFrame(traces))
+        response = requests.get(f"{API_BASE_URL}/traces", headers=headers)
+        if response.status_code == 200:
+            traces = response.json()["traces"]
+            if traces:
+                st.subheader("Trace Dashboard")
+                st.dataframe(pd.DataFrame(traces))
+            else:
+                st.error("No traces found")
+        else:
+            st.error(response.text)
+        st.sidebar.markdown("---")
 
 if st.session_state.token:
     st.subheader("Chat")

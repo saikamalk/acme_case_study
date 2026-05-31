@@ -1,3 +1,5 @@
+import asyncio
+
 from app.agent.exceptions import PlannerValidationError
 from app.agent.executor import execute_plan
 from app.agent.planner import create_plan
@@ -8,10 +10,10 @@ from app.skills.escalation_summary import EscalationSummarySkill
 from app.skills.standard_response import StandardResponseSkill
 
 
-def route_query(user_query: str, user: dict):
+async def route_query_async(user_query: str, user: dict):
     try:
         logger.info(f"User Query:\n{user_query}")
-        history = get_conversation_history(user["username"])
+        history = await asyncio.to_thread(get_conversation_history, user["username"])
         history_text = ""
         for item in history:
             history_text += f"{item['role']}: {item['message']}\n"
@@ -24,7 +26,7 @@ def route_query(user_query: str, user: dict):
         {user_query}
         """
         logger.info(f"Enriched Query:\n{enriched_query}")
-        plan = create_plan(enriched_query)
+        plan = await asyncio.to_thread(create_plan, enriched_query)
         logger.info(f"Plan Created:\n{plan.model_dump()}")
 
         if plan.customer_name:
@@ -47,7 +49,7 @@ def route_query(user_query: str, user: dict):
                 "tool_input": tool_input,
             }
         )
-        tool_output = execute_plan(plan)
+        tool_output = await execute_plan(plan)
         logger.info(f"Tool Output:\n{tool_output}")
         add_trace(
             {
@@ -66,11 +68,17 @@ def route_query(user_query: str, user: dict):
         )
         logger.info(f"Skill selected:\n{plan.response_mode}")
         if plan.response_mode == "escalation":
-            final_response = EscalationSummarySkill.execute(user_query, tool_output, history_text)
+            final_response = await asyncio.to_thread(
+                EscalationSummarySkill.execute,
+                user_query, tool_output, history_text
+            )
         else:
-            final_response = StandardResponseSkill.execute(user_query, tool_output, history_text)
-        save_message(user["username"], "user", user_query)
-        save_message(user["username"], "assistant", final_response)
+            final_response = await asyncio.to_thread(
+                StandardResponseSkill.execute,
+                user_query, tool_output, history_text
+            )
+        await asyncio.to_thread(save_message, user["username"], "user", user_query)
+        await asyncio.to_thread(save_message, user["username"], "assistant", final_response)
         logger.info(f"Final Response:\n{final_response}")
         return final_response
     except PlannerValidationError as e:
@@ -79,3 +87,7 @@ def route_query(user_query: str, user: dict):
     except Exception as e:
         logger.error(f"AGENT_ERROR={str(e)}", exc_info=True)
         return {"error": str(e)}
+
+
+def route_query(user_query: str, user: dict):
+    return asyncio.run(route_query_async(user_query, user))

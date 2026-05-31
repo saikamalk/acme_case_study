@@ -1,6 +1,4 @@
-from app.agent.tools import customer_lookup, issue_history_lookup
-from app.tools.issue_update_tools import add_issue_update_tool
-from app.tools.next_action_tools import create_next_action_tool
+from app.agent.tools import customer_lookup, issue_history_lookup, create_next_action_tool, add_issue_update_tool
 
 
 def execute_plan(plan):
