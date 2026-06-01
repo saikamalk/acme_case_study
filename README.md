@@ -139,7 +139,7 @@ Current MCP tools:
 - customer_profile_tool
 - issue_history_tool
 - add_issue_update_tool
-- crate_next_action_tool
+- create_next_action_tool
 
 This approach allows new tools to be introduced without requiring changes to the core planning workflow.
 
