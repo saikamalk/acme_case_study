@@ -75,7 +75,6 @@ Responsibilities include:
 
 Key endpoints include:
 - `/chat`
-- `/traces`
 - `/health`
 - `/clear_user_cache`
 
@@ -135,6 +134,12 @@ Benefits include:
 - Reusable integrations
 - Simplified agent architecture
 - Easier future integrations with enterprise systems
+
+Current MCP tools:
+- customer_profile_tool
+- issue_history_tool
+- add_issue_update_tool
+- crate_next_action_tool
 
 This approach allows new tools to be introduced without requiring changes to the core planning workflow.
 
@@ -237,7 +242,7 @@ The agent uses MCP to invoke enterprise capabilities such as customer profile re
 This demonstrates how enterprise systems can be integrated through a standards-based protocol while keeping agent orchestration logic clean, reusable, and maintainable.
  
 ## Observability
-The platform includes basic observability features to support debugging and operational visibility.
+The platform includes OpenTelemetry-based observability for debugging and operational visibility.
 
 Captured signals include:
 - Request logs
@@ -251,16 +256,17 @@ Captured signals include:
 
 These capabilities allow operators to understand how the agent reached a response and diagnose failures during execution.
 
-### Custom Trace Viewer
-A lightweight trace viewer is available through the Streamlit UI.
+### Trace Visualization
+Traces are exported through OpenTelemetry and visualized in Jaeger.
 
-The viewer provides visibility into:
+The Streamlit UI provides quick access to Jaeger for inspecting:
 - Planner decisions
 - MCP tool executions
-- Skill selection
-- Tool usage statistics
+- Skill execution
+- Tool usage patterns
+- End-to-end request traces
 
-- This enables end-to-end inspection of how the assistant generated a response and serves as a lightweight custom trace viewer for agent execution analysis.
+This provides a complete view of assistant execution flow for debugging and operational analysis.
 
 ## Running Locally
 
@@ -315,13 +321,16 @@ The assessment prioritizes a fully runnable local solution over production-scale
 The following simplifications were intentionally made:
 
 ### Observability
+The solution uses OpenTelemetry and Jaeger for local trace collection and visualization.
 
-Traces are currently stored in memory and exposed through a lightweight trace endpoint. Trace inspection is restricted to administrators because traces may contain operational metadata.
+The implementation focuses on local deployment and debugging rather than production-scale observability infrastructure.
 
-Production alternatives:
-- OpenTelemetry
+Production alternatives may include:
 - LangSmith
 - Arize Phoenix
+- Datadog
+- New Relic
+- Grafana Tempo
 
 ### Data
 
@@ -436,9 +445,10 @@ This implementation satisfies all mandatory assessment requirements:
 - MCP tool invocation works
 
 ### Observability
-- Traces visible
+- Jaeger Traces visible
 - Request logs visible
 - Tool execution logs visible
+- OpenTelemetry instrumentation active
 
 ### Deployment
 - Docker Compose starts entire stack
