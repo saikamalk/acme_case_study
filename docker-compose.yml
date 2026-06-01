@@ -22,7 +22,6 @@ services:
       - keycloak
       - mcp_server
     environment:
-      MCP_API_KEY: "acme-internal-secret-2024"
       MCP_BASE_URL: http://mcp_server:8100
       KEYCLOAK_BASE_URL: http://keycloak:8080
       KEYCLOAK_REALM: acme
@@ -53,7 +52,6 @@ services:
         condition: service_healthy
     restart: unless-stopped
     environment:
-      MCP_API_KEY: "acme-internal-secret-2024"
       POSTGRES_DB: acme
       POSTGRES_HOST: postgres
       POSTGRES_PASSWORD: acme123

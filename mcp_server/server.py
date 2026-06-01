@@ -1,10 +1,7 @@
 import os
 from typing import Any
-from urllib.request import Request
 
 from mcp.server.fastmcp import FastMCP
-from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.responses import JSONResponse
 
 from mcp_server.db.queries import add_issue_update, create_next_action, get_issue_updates
 from mcp_server.services.customer_service import CustomerService
@@ -16,13 +13,6 @@ mcp = FastMCP(
     host=os.getenv("MCP_HOST"),
     port=int(os.getenv("MCP_PORT")),
 )
-
-
-class APIKeyMiddleware(BaseHTTPMiddleware):
-    async def dispatch(self, request: Request, call_next):
-        if request.headers.get("X-API-KEY") != os.getenv("MCP_API_KEY"):
-            return JSONResponse({"error": "Unauthorized"}, status_code=401)
-        return await call_next(request)
 
 
 @mcp.tool()

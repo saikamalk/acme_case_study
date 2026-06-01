@@ -34,6 +34,6 @@ class LoggingMiddleware(BaseHTTPMiddleware):
                 return response
             except Exception as e:
                 span.record_exception(e)
-                span.set_staus(trace.StatusCode.ERROR, str(e))
+                span.set_status(trace.StatusCode.ERROR, str(e))
                 logger.error(f"TRACE_ID={otel_traec_id} | ERROR={e}", exc_info=True)
                 raise

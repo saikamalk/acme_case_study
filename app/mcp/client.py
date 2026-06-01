@@ -1,5 +1,7 @@
 import os
 from typing import Any
+
+import httpx
 from mcp import ClientSession
 from mcp.client.streamable_http import streamable_http_client
 from app.observability.logger import logger
