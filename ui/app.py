@@ -1,3 +1,5 @@
+import os
+
 import pandas as pd
 import requests
 import streamlit as st
@@ -41,6 +43,7 @@ with st.sidebar:
     if st.sidebar.button("Logout"):
         st.session_state.token = None
         st.rerun()
+    st.sidebar.markdown("---")
     if st.sidebar.button("Clear Conversation"):
         response = requests.delete(
             f"{API_BASE_URL}/clear_user_cache",
@@ -51,68 +54,7 @@ with st.sidebar:
         else:
             st.error(response.text)
     st.sidebar.markdown("---")
-    if st.sidebar.button("Open Trace Viewer"):
-        response = requests.get(
-            f"{API_BASE_URL}/traces",
-            headers=headers
-        )
-        if response.status_code == 200:
-            traces = response.json()["traces"]
-            if traces:
-                st.subheader("Agent Trace Viewer")
-                st.info(
-                    """
-                    This custom trace viewer provides visibility into:
-                    - Planner decisions
-                    - MCP tool executions
-                    - Skill selection
-                    """
-                )
-                df = pd.DataFrame(traces)
-                col1, col2, col3 = st.columns(3)
-                with col1:
-                    st.metric(
-                        "Agent Decisions",
-                        len([
-                            t for t in traces
-                            if t.get("type") == "agent"
-                        ])
-                    )
-                with col2:
-                    st.metric(
-                        "Tool Executions",
-                        len([
-                            t for t in traces
-                            if t.get("type") == "tool_execution"
-                        ])
-                    )
-                with col3:
-                    st.metric(
-                        "Skill Executions",
-                        len([
-                            t for t in traces
-                            if t.get("type") == "skill"
-                        ])
-                    )
-                tool_traces = [
-                    t for t in traces
-                    if t.get("type") == "tool_execution"
-                ]
-                if tool_traces:
-                    tool_df = pd.DataFrame(tool_traces)
-                    if "tool_name" in tool_df.columns:
-                        st.subheader("Tool Usage Statistics")
-                        st.bar_chart(
-                            tool_df["tool_name"].value_counts()
-                        )
-                st.subheader("Latest Event")
-                st.json(traces[-1])
-                st.subheader("Trace Events")
-                st.dataframe(df, use_container_width=True)
-            else:
-                st.warning("No traces found")
-        else:
-            st.error(response.text)
+    st.sidebar.markdown(f"[Open Trace Viewer]({os.getenv('TRACE_VIEWER_URL')})", unsafe_allow_html=True)
 if st.session_state.token:
     st.subheader("Chat")
     user_query = st.text_area("Enter your query")

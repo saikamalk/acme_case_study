@@ -9,8 +9,8 @@
     "query": "Show open issues for Globex Corp",
     "selected_tool": "customer_profile_tool",
     "selected_skill": "standard",
-    "tool_input": "Globex",
-    "response": "Based on the retrieved data, the open issues for Globex Corp are:\n\n1. Payment API timeout (High priority)\n2. Invoice mismatch (Medium priority)",
+    "tool_input": "Globex Corp",
+    "response": "Globex Corp has two open issues:\n\n1. Payment API timeout (High priority)\n   - Engineering deployed hotfix\n   - Engineering identified database connection leak\n   - Hotfix deployed to staging environment\n   - Customer reported intermittent improvement\n2. Invoice mismatch (Medium priority)\n   - Finance team investigating invoice calculation discrepancy\n   - Awaiting updated tax configuration from client",
     "passed_checks": [
       "tool=customer_profile_tool",
       "response_mode=standard"
@@ -29,8 +29,8 @@
     "query": "Show open issues for Globex",
     "selected_tool": "customer_profile_tool",
     "selected_skill": "standard",
-    "tool_input": "Globex",
-    "response": "Based on the retrieved data, the open issues for Globex Corp are:\n\n1. Payment API timeout (High priority)\n2. Invoice mismatch (Medium priority)",
+    "tool_input": "Globex Corp",
+    "response": "Globex Corp has two open issues:\n\n1. Payment API timeout (High priority)\n   - Engineering deployed hotfix\n   - Engineering identified database connection leak\n   - Hotfix deployed to staging environment\n   - Customer reported intermittent improvement\n2. Invoice mismatch (Medium priority)\n   - Finance team investigating invoice calculation discrepancy\n   - Awaiting updated tax configuration from client",
     "passed_checks": [
       "tool=customer_profile_tool",
       "response_mode=standard"
@@ -49,8 +49,8 @@
     "query": "What's happening with Wayne?",
     "selected_tool": "customer_profile_tool",
     "selected_skill": "standard",
-    "tool_input": "Wayne",
-    "response": "Based on the retrieved data, there is an open issue for Wayne Enterprises:\n\n1. SSO login failure (High priority) - Escalated, with a temporary authentication workaround deployed due to an expired identity provider certificate.",
+    "tool_input": "Wayne Enterprises",
+    "response": "Wayne Enterprises' SSO login failure issue is currently escalated and has two updates:\n\n1. Identity provider certificate expired\n2. Temporary authentication workaround deployed",
     "passed_checks": [
       "tool=customer_profile_tool",
       "response_mode=standard"
@@ -70,7 +70,7 @@
     "selected_tool": "customer_profile_tool",
     "selected_skill": "standard",
     "tool_input": "Stark Industries",
-    "response": "Based on the retrieved data, the current status of Stark Industries is:\n\nThere is an open issue:\n\n1. Reporting dashboard latency (Low priority) - Dashboard latency reproduced under high load testing, with a performance optimization patch under review.",
+    "response": "Stark Industries has one open issue:\n\n1. Reporting dashboard latency (Low priority)\n   - Dashboard latency reproduced under high load testing\n   - Performance optimization patch under review",
     "passed_checks": [
       "tool=customer_profile_tool",
       "response_mode=standard"
@@ -90,7 +90,7 @@
     "selected_tool": "issue_history_tool",
     "selected_skill": "standard",
     "tool_input": "1",
-    "response": "Based on the retrieved data, the history for issue 1 is:\n\n1. 2026-05-31T06:20:28.806608: Engineering identified database connection leak\n2. 2026-05-31T06:20:28.806608: Customer reported intermittent improvement\n3. 2026-05-31T06:41:52.775458: Engineering deployed hotfix\n4. 2026-05-31T06:56:00.706892: Engineering deployed hotfix\n5. 2026-05-31T06:56:23.570843: Engineering deployed hotfix\n6. 2026-05-31T07:31:48.095513: Engineering deployed hotfix\n7. 2026-05-31T07:32:11.587661: Engineering deployed hotfix",
+    "response": "The history for issue 1 is as follows:\n\n1. Engineering identified database connection leak (2026-05-31T16:12:04.270938)\n2. Hotfix deployed to staging environment (2026-05-31T16:12:04.270938)\n3. Engineering deployed hotfix (2026-06-01T07:05:37.917440)\n4. Customer reported intermittent improvement (2026-05-31T16:12:04.270938)",
     "passed_checks": [
       "tool=issue_history_tool",
       "response_mode=standard"
@@ -110,7 +110,7 @@
     "selected_tool": "issue_history_tool",
     "selected_skill": "standard",
     "tool_input": "2",
-    "response": "Based on the retrieved data, the latest update on issue 2 is:\n\nAwaiting updated tax configuration from client.",
+    "response": "The latest update on issue 2 is that the team is awaiting updated tax configuration from the client.",
     "passed_checks": [
       "tool=issue_history_tool",
       "response_mode=standard"
@@ -130,7 +130,7 @@
     "selected_tool": "issue_history_tool",
     "selected_skill": "standard",
     "tool_input": "3",
-    "response": "Based on the retrieved data, the timeline for issue 3 is:\n\n1. 2026-05-31T06:20:28.806608: Customer escalated issue to account director\n2. 2026-05-31T06:20:28.806608: Support team scheduled onboarding review call",
+    "response": "The timeline for issue 3 is as follows:\n\n1. Customer escalated issue to account director (2026-05-31T16:12:04.270938)\n2. Support team scheduled onboarding review call (2026-05-31T16:12:04.270938)",
     "passed_checks": [
       "tool=issue_history_tool",
       "response_mode=standard"
@@ -150,7 +150,7 @@
     "selected_tool": "customer_profile_tool",
     "selected_skill": "escalation",
     "tool_input": "Initech",
-    "response": "**Executive Summary**\n\nInitech, a healthcare industry customer, is experiencing a critical issue with delayed onboarding, which has been escalated to the account director.\n\n**Risk Level**\n\nBased on the customer data, the risk level is **Critical** due to the escalated and critical status of the delayed onboarding issue.\n\n**Recommended Next Action**\n\nSchedule an urgent onboarding review call with the customer to address their concerns and provide a clear plan for resolving the issue.\n\n**Missing Information**\n\nTo provide a more comprehensive understanding of the situation, the following information is missing:\n\n* The root cause of the delayed onboarding process\n* The customer's specific requirements and expectations for the onboarding process",
+    "response": "**Executive Summary**\n\nInitech, a healthcare industry customer, is currently at risk due to a critical delayed onboarding issue.\n\n**Risk Level**\n\nThe risk level is **Critical** due to the escalated and critical status of the delayed onboarding issue.\n\n**Recommended Next Action**\n\nSchedule an urgent call with the customer to discuss the delayed onboarding issue and provide a clear plan for resolving the issue.\n\n**Missing Information**\n\nTo provide a more comprehensive understanding of the situation, the following information is missing:\n\n* The root cause of the delayed onboarding\n* The customer's specific requirements and expectations for the onboarding process",
     "passed_checks": [
       "tool=customer_profile_tool",
       "response_mode=escalation"
@@ -169,8 +169,8 @@
     "query": "Give me an executive summary for Globex Corp",
     "selected_tool": "customer_profile_tool",
     "selected_skill": "escalation",
-    "tool_input": "Globex",
-    "response": "**Executive Summary**\n\nGlobex Corp, a retail industry customer, is experiencing two open issues: a high-priority issue related to a payment API timeout and a medium-priority issue related to an invoice mismatch.\n\n**Risk Level**\n\nBased on the customer data, the risk level is **Medium** due to the presence of two open issues, one of which is high-priority.\n\n**Recommended Next Action**\n\nSchedule a call with the customer to discuss the status of the open issues and provide a clear plan for resolving them.\n\n**Missing Information**\n\nTo provide a more comprehensive understanding of the situation, the following information is missing:\n\n* The root cause of the payment API timeout issue\n* The expected resolution timeline for the open issues\n* Any additional open issues or concerns that may be impacting the customer's satisfaction",
+    "tool_input": "Globex Corp",
+    "response": "**Executive Summary**\n\nGlobex Corp, a retail industry customer, is currently active and experiencing two open issues: a payment API timeout and an invoice mismatch.\n\n**Risk Level**\n\nBased on the customer data, the risk level is **Medium** due to the presence of two open issues, one with high priority and the other with medium priority.\n\n**Recommended Next Action**\n\nSchedule a call with the customer to discuss the payment API timeout and invoice mismatch issues. Request an update on the customer's experience with the hotfix deployed for the payment API timeout and provide an update on the investigation into the invoice calculation discrepancy.\n\n**Missing Information**\n\nTo provide a more comprehensive understanding of the situation, the following information is missing:\n\n* The customer's specific requirements and expectations for the payment API and invoice processing\n* Any additional open issues or concerns that may be impacting the customer's satisfaction\n* The customer's business impa",
     "passed_checks": [
       "tool=customer_profile_tool",
       "response_mode=escalation"
@@ -190,7 +190,7 @@
     "selected_tool": "customer_profile_tool",
     "selected_skill": "escalation",
     "tool_input": "Stark Industries",
-    "response": "**Executive Summary**\n\nStark Industries, a manufacturing industry customer, is experiencing a low-priority issue with reporting dashboard latency. The issue has been reproduced under high load testing and a performance optimization patch is under review.\n\n**Risk Level**\n\nBased on the customer data, the risk level is **Low** due to the issue being classified as low-priority.\n\n**Recommended Next Action**\n\nSchedule a call with the customer to provide an update on the status of the performance optimization patch and confirm the expected resolution timeline.\n\n**Missing Information**\n\nTo provide a more comprehensive understanding of the situation, the following information is missing:\n\n* The expected resolution timeline for the reporting dashboard latency issue",
+    "response": "**Executive Summary**\n\nStark Industries, a manufacturing industry customer, is currently active and experiencing a reporting dashboard latency issue.\n\n**Risk Level**\n\nBased on the customer data, the risk level is **Low** due to the presence of a single open issue with low priority.\n\n**Recommended Next Action**\n\nSchedule a call with the customer to discuss the reporting dashboard latency issue. Provide an update on the performance optimization patch under review and request feedback on the dashboard's performance under high load testing.\n\n**Missing Information**\n\nTo provide a more comprehensive understanding of the situation, the following information is missing:\n\n* The customer's specific requirements and expectations for the reporting dashboard\n* Any additional open issues or concerns that may be impacting the customer's satisfaction\n* The customer's business impact and potential consequences of the dashboard latency issue",
     "passed_checks": [
       "tool=customer_profile_tool",
       "response_mode=escalation"
@@ -210,7 +210,7 @@
     "selected_tool": "customer_profile_tool",
     "selected_skill": "escalation",
     "tool_input": "Wayne Enterprises",
-    "response": "**Executive Summary**\n\nWayne Enterprises, a finance industry customer, is experiencing a high-priority issue with SSO login failure, which has been escalated.\n\n**Risk Level**\n\nBased on the customer data, the risk level is **High** due to the escalated and high-priority status of the SSO login failure issue.\n\n**Recommended Next Action**\n\nSchedule an urgent call with the customer to discuss the temporary authentication workaround and provide a clear plan for resolving the issue.\n\n**Missing Information**\n\nTo provide a more comprehensive understanding of the situation, the following information is missing:\n\n* The expected resolution timeline for the SSO login failure issue\n* Any additional open issues or concerns that may be impacting the customer's satisfaction",
+    "response": "**Executive Summary**\n\nWayne Enterprises, a finance industry customer and VIP account, is currently experiencing a high-priority SSO login failure issue.\n\n**Risk Level**\n\nThe risk level is **High** due to the escalated status of the SSO login failure issue.\n\n**Recommended Next Action**\n\nSchedule an urgent call with the customer to discuss the SSO login failure issue and provide a clear plan for resolving the issue. Request an update on the temporary authentication workaround deployed and provide a timeline for a permanent fix.\n\n**Missing Information**\n\nTo provide a more comprehensive understanding of the situation, the following information is missing:\n\n* The root cause of the SSO login failure\n* The customer's specific requirements and expectations for the SSO login process\n* Any additional open issues or concerns that may be impacting the customer's satisfaction",
     "passed_checks": [
       "tool=customer_profile_tool",
       "response_mode=escalation"
@@ -226,7 +226,7 @@
     "roles": [
       "sales_user"
     ],
-    "query": "Can you summarize stark's situation?",
+    "query": "Can you escalate stark's situation?",
     "selected_tool": "customer_profile_tool",
     "selected_skill": "escalation",
     "tool_input": "Stark Industries",
@@ -248,8 +248,8 @@
     "query": "How bad is Globex's situation?",
     "selected_tool": "customer_profile_tool",
     "selected_skill": "escalation",
-    "tool_input": "Globex",
-    "response": "**Executive Summary**\n\nGlobex Corp, a retail industry customer, is experiencing two open issues: a high-priority issue related to a payment API timeout and a medium-priority issue related to an invoice mismatch.\n\n**Risk Level**\n\nBased on the customer data, the risk level is **Medium** due to the presence of two open issues, one of which is high-priority.\n\n**Recommended Next Action**\n\nSchedule a call with the customer to discuss the status of the open issues and provide a clear plan for resolving them.\n\n**Missing Information**\n\nTo provide a more comprehensive understanding of the situation, the following information is missing:\n\n* The root cause of the payment API timeout issue\n* The expected resolution timeline for the open issues\n* Any additional open issues or concerns that may be impacting the customer's satisfaction",
+    "tool_input": "Globex Corp",
+    "response": "**Executive Summary**\n\nGlobex Corp, a retail industry customer, is currently active and experiencing two open issues: a payment API timeout and an invoice mismatch.\n\n**Risk Level**\n\nThe risk level is **Medium** due to the presence of two open issues, one with high priority and the other with medium priority.\n\n**Recommended Next Action**\n\nSchedule a call with the customer to discuss the payment API timeout and invoice mismatch issues. Request an update on the customer's experience with the hotfix deployed for the payment API timeout and provide an update on the investigation into the invoice calculation discrepancy.\n\n**Missing Information**\n\nTo provide a more comprehensive understanding of the situation, the following information is missing:\n\n* The customer's specific requirements and expectations for the payment API and invoice processing\n* Any additional open issues or concerns that may be impacting the customer's satisfaction\n* The customer's business impact and potential consequence",
     "passed_checks": [
       "response_mode=escalation"
     ],
@@ -265,10 +265,10 @@
       "admin"
     ],
     "query": "How bad is Globex's situation?",
-    "selected_tool": "create_next_action_tool",
+    "selected_tool": "customer_profile_tool",
     "selected_skill": "escalation",
-    "tool_input": "1",
-    "response": "**Executive Summary**\n\nGlobex Corp has reported two open issues: 'Payment API timeout' and 'Invoice mismatch'. The 'Payment API timeout' issue is high-priority and has seen multiple updates, while the 'Invoice mismatch' issue is of medium priority and is under investigation.\n\n**Risk Level**\n\nBased on the customer data, I assess the risk level as **Medium**.\n\n**Recommended Next Action**\n\nNo new action is required as the 'Payment API timeout' issue has been escalated to a higher level of support (Action ID: 10).\n\n**Missing Information**\n\nTo better understand the situation and provide more effective support, I would like to request the following information:\n\n- More detailed information on the root cause of the 'Payment API timeout' issue\n- An estimated timeline for resolving both open issues",
+    "tool_input": "Globex Corp",
+    "response": "**Globex Corp Update**\n\n**Executive Summary**\n\nGlobex Corp, a retail industry customer, is currently experiencing two open issues: Payment API timeout and Invoice mismatch. The Payment API timeout issue has a high priority and is still open after a hotfix was deployed.\n\n**Risk Level**\n\nBased on the customer data, the risk level is **High** due to the high priority of the Payment API timeout issue.\n\n**Recommended Next Action**\n\nWe recommend that the support team work closely with the engineering team to expedite the resolution of the Payment API timeout issue, as it has a high priority and may impact the customer's business operations.\n\n**Missing Information**\n\nTo better understand the situation and provide more effective support, we recommend gathering additional information on:\n\n* The customer's specific requirements and expectations for the Payment API performance\n* Any potential dependencies or external factors that may be impacting the resolution of the Payment API timeout issue",
     "passed_checks": [
       "response_mode=escalation"
     ],
@@ -287,7 +287,7 @@
     "selected_tool": "customer_profile_tool",
     "selected_skill": "standard",
     "tool_input": "Hogwarts Corporation",
-    "response": "Based on the retrieved data, there is no information available for Hogwarts Corporation. The retrieved data only contains information for Globex Corp.",
+    "response": "I couldn't find any information about Hogwarts Corporation in the retrieved data. However, I can show you the open issues for Globex Corp, which is the only active account in the retrieved data.\n\nThe open issues for Globex Corp are:\n\n1. Payment API timeout (High priority)\n2. Invoice mismatch (Medium priority)\n\nPlease note that there is no information about Hogwarts Corporation in the retrieved data.",
     "passed_checks": [
       "customer_not_found"
     ],
@@ -306,7 +306,7 @@
     "selected_tool": "issue_history_tool",
     "selected_skill": "standard",
     "tool_input": "99999",
-    "response": "There is no history available for issue 99999 as the retrieved data does not contain any information for this issue.",
+    "response": "I'm unable to retrieve the history for issue 99999 as it was not found or no history is available.",
     "passed_checks": [
       "not_found"
     ],
@@ -325,7 +325,7 @@
     "selected_tool": "customer_profile_tool",
     "selected_skill": "escalation",
     "tool_input": "Initech",
-    "response": "**Executive Summary**\n\nInitech, a healthcare industry customer, is experiencing a critical issue with delayed onboarding, which has been escalated to the account director.\n\n**Risk Level**\n\nBased on the customer data, the risk level is **Critical** due to the escalated and critical status of the delayed onboarding issue.\n\n**Recommended Next Action**\n\nSchedule an urgent onboarding review call with the customer to address their concerns and provide a clear plan for resolving the issue.\n\n**Missing Information**\n\nTo provide a more comprehensive understanding of the situation, the following information is missing:\n\n* The root cause of the delayed onboarding process\n* The customer's specific requirements and expectations for the onboarding process",
+    "response": "**Executive Summary**\n\nInitech, a healthcare industry customer, is currently at risk and experiencing a critical delayed onboarding issue.\n\n**Risk Level**\n\nThe risk level is **Critical** due to the escalated status of the delayed onboarding issue.\n\n**Recommended Next Action**\n\nSchedule an urgent call with the customer to discuss the delayed onboarding issue and provide a clear plan for resolving the issue. Request an update on the onboarding review call scheduled with the support team and provide a timeline for completing the onboarding process.\n\n**Missing Information**\n\nTo provide a more comprehensive understanding of the situation, the following information is missing:\n\n* The root cause of the delayed onboarding\n* The customer's specific requirements and expectations for the onboarding process\n* Any additional open issues or concerns that may be impacting the customer's satisfaction",
     "passed_checks": [
       "tool=customer_profile_tool",
       "response_mode=escalation"
@@ -345,7 +345,7 @@
     "selected_tool": "customer_profile_tool",
     "selected_skill": "standard",
     "tool_input": "Stark Industries",
-    "response": "Based on the retrieved data, there is one open issue for Stark Industries:\n\nIssue ID: 5\nTitle: Reporting dashboard latency\nStatus: Open\nPriority: Low\n\nThe latest update on this issue is that performance optimization patch is under review.",
+    "response": "There is one open issue for Stark Industries:\n\n1. Reporting dashboard latency (Low priority)\n\nThis issue is currently under review for a performance optimization patch.",
     "passed_checks": [
       "tool=customer_profile_tool",
       "response_mode=standard"
@@ -365,7 +365,7 @@
     "selected_tool": "customer_profile_tool",
     "selected_skill": "standard",
     "tool_input": "Wayne",
-    "response": "Based on the retrieved data, it appears that Wayne Enterprises is currently experiencing an issue with SSO login failure, which has been escalated and is being addressed. The latest update indicates that a temporary authentication workaround has been deployed.",
+    "response": "There is an open issue with Wayne Enterprises regarding SSO login failure. The issue is currently escalated and a temporary authentication workaround has been deployed. The root cause is attributed to an expired identity provider certificate.",
     "passed_checks": [
       "tool=customer_profile_tool",
       "response_mode=standard"
@@ -385,7 +385,7 @@
     "selected_tool": "customer_profile_tool",
     "selected_skill": "escalation",
     "tool_input": "Stark Industries",
-    "response": "**Executive Summary**\n\nStark Industries, a manufacturing industry customer, is experiencing a low-priority issue with reporting dashboard latency. The issue has been reproduced under high load testing and a performance optimization patch is under review.\n\n**Risk Level**\n\nBased on the customer data, the risk level is **Low** due to the issue being classified as low-priority.\n\n**Recommended Next Action**\n\nSchedule a call with the customer to provide an update on the status of the performance optimization patch and confirm the expected resolution timeline.\n\n**Missing Information**\n\nTo provide a more comprehensive understanding of the situation, the following information is missing:\n\n* The expected resolution timeline for the reporting dashboard latency issue",
+    "response": "**Executive Summary**\n\nStark Industries, a manufacturing industry customer, is currently active and experiencing a reporting dashboard latency issue.\n\n**Risk Level**\n\nThe risk level is **Low** due to the presence of a single open issue with low priority.\n\n**Recommended Next Action**\n\nSchedule a call with the customer to discuss the reporting dashboard latency issue. Provide an update on the performance optimization patch under review and request feedback on the dashboard's performance under high load testing.\n\n**Missing Information**\n\nTo provide a more comprehensive understanding of the situation, the following information is missing:\n\n* The customer's specific requirements and expectations for the reporting dashboard\n* Any additional open issues or concerns that may be impacting the customer's satisfaction\n* The customer's business impact and potential consequences of the dashboard latency issue",
     "passed_checks": [
       "tool=customer_profile_tool",
       "response_mode=escalation"
@@ -405,7 +405,7 @@
     "selected_tool": "create_next_action_tool",
     "selected_skill": "standard",
     "tool_input": "1",
-    "response": "**Action Created**\n\nA new action has been created for issue 1 with the following details:\n- Action ID: 11\n- Status: Created",
+    "response": "**Next Action for Issue 1**\n\nA next action for issue 1 (Payment API timeout) has been created with ID 9.",
     "passed_checks": [
       "tool=create_next_action_tool",
       "response_mode=standard"
@@ -463,7 +463,7 @@
     "selected_tool": "customer_profile_tool",
     "selected_skill": "standard",
     "tool_input": "Globex",
-    "response": "Based on the retrieved data, there are two open issues for Globex Corp:\n\n1. Issue ID: 1\n   Title: Payment API timeout\n   Status: Open\n   Priority: High\n\n   The latest update indicates that engineering deployed a hotfix.\n\n2. Issue ID: 2\n   Title: Invoice mismatch\n   Status: Open\n   Priority: Medium\n\n   The latest update indicates that the finance team is investigating an invoice calculation discrepancy and is awaiting updated tax configuration from the client.",
+    "response": "There are two open issues for Globex Corp:\n\n1. Payment API timeout (High priority)\n   - Engineering deployed hotfix\n   - Engineering identified database connection leak\n   - Hotfix deployed to staging environment\n   - Customer reported intermittent improvement\n\n2. Invoice mismatch (Medium priority)\n   - Finance team investigating invoice calculation discrepancy\n   - Awaiting updated tax configuration from client",
     "passed_checks": [
       "grounded"
     ],
@@ -482,7 +482,7 @@
     "selected_tool": "issue_history_tool",
     "selected_skill": "standard",
     "tool_input": "1",
-    "response": "Based on the retrieved data, here is the history for issue 1:\n\n1. 2026-05-31T06:20:28.806608: Customer reported intermittent improvement\n2. 2026-05-31T06:20:28.806608: Hotfix deployed to staging environment\n3. 2026-05-31T06:20:28.806608: Engineering identified database connection leak\n4. 2026-05-31T06:41:52.775458: Engineering deployed hotfix\n5. 2026-05-31T06:56:00.706892: Engineering deployed hotfix\n6. 2026-05-31T06:56:23.570843: Engineering deployed hotfix\n7. 2026-05-31T07:31:48.095513: Engineering deployed hotfix\n8. 2026-05-31T07:32:11.587661: Engineering deployed hotfix",
+    "response": "The history for issue 1 is as follows:\n\n1. Engineering identified database connection leak (2026-05-31T16:12:04.270938)\n2. Hotfix deployed to staging environment (2026-05-31T16:12:04.270938)\n3. Customer reported intermittent improvement (2026-05-31T16:12:04.270938)\n4. Engineering deployed hotfix (2026-06-01T07:05:37.917440)",
     "passed_checks": [
       "grounded"
     ],
@@ -500,8 +500,8 @@
     "query": "what is their current status",
     "selected_tool": "customer_profile_tool",
     "selected_skill": "standard",
-    "tool_input": "Wayne",
-    "response": "Based on the retrieved data, the current status of Wayne Enterprises is VIP and they have one open issue:\n\nIssue ID: 6\nTitle: SSO login failure\nStatus: Escalated\nPriority: High\n\nThe latest update indicates that a temporary authentication workaround has been deployed.",
+    "tool_input": "Wayne Enterprises",
+    "response": "Wayne Enterprises is currently in a VIP account status.",
     "passed_checks": [
       "tool=customer_profile_tool"
     ],
@@ -520,7 +520,7 @@
     "selected_tool": "add_issue_update_tool",
     "selected_skill": "standard",
     "tool_input": "1",
-    "response": "**Update on Stark Industries Issue**\n\nThe engineering team has successfully deployed a hotfix to address the reporting dashboard latency issue.",
+    "response": "**Update Added**\n\nUpdate ID: 15\nUpdate Text: Engineering deployed hotfix\nStatus: Created",
     "passed_checks": [
       "tool=add_issue_update_tool"
     ],

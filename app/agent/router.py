@@ -5,7 +5,7 @@ from app.agent.executor import execute_plan
 from app.agent.planner import create_plan
 from app.cache.memory import get_conversation_history, save_message
 from app.observability.logger import logger
-from app.observability.trace_store import add_trace
+from app.observability.trace_store import tracer
 from app.skills.escalation_summary import EscalationSummarySkill
 from app.skills.standard_response import StandardResponseSkill
 
@@ -26,7 +26,10 @@ async def route_query_async(user_query: str, user: dict):
         {user_query}
         """
         logger.info(f"Enriched Query:\n{enriched_query}")
-        plan = await asyncio.to_thread(create_plan, enriched_query)
+        with tracer.start_as_current_span("planner") as span:
+            plan = await asyncio.to_thread(create_plan, enriched_query)
+            span.set_attribute("tool.selected", plan.tool_name)
+            span.set_attribute("response.mode", plan.response_mode)
         logger.info(f"Plan Created:\n{plan.model_dump()}")
 
         if plan.customer_name:
@@ -35,48 +38,29 @@ async def route_query_async(user_query: str, user: dict):
             tool_input = str(plan.issue_id)
         elif plan.action_text:
             tool_input = str(plan.action_text)
-        elif plan.tool_input:
-            tool_input = str(plan.tool_input)
         else:
             tool_input = ""
 
-        add_trace(
-            {
-                "type": "agent",
-                "username": user["username"],
-                "query": user_query,
-                "selected_tool": plan.tool_name,
-                "tool_input": tool_input,
-            }
-        )
-        tool_output = await execute_plan(plan)
+        with tracer.start_as_current_span("tool_execution") as span:
+            tool_output = await execute_plan(plan)
+            span.set_attribute("tool.name", plan.tool_name)
+            span.set_attribute("tool.input", str(tool_input))
+            span.set_attribute("tool.output", str(tool_output))
         logger.info(f"Tool Output:\n{tool_output}")
-        add_trace(
-            {
-                "type": "tool_execution",
-                "username": user["username"],
-                "tool_name": plan.tool_name,
-                "tool_output": str(tool_output)[:500]
-            }
-        )
-        add_trace(
-            {
-                "type": "skill",
-                "username": user["username"],
-                "selected_skill": plan.response_mode,
-            }
-        )
         logger.info(f"Skill selected: {plan.response_mode}")
-        if plan.response_mode == "escalation":
-            final_response = await asyncio.to_thread(
-                EscalationSummarySkill.execute,
-                user_query, tool_output, history_text
-            )
-        else:
-            final_response = await asyncio.to_thread(
-                StandardResponseSkill.execute,
-                user_query, tool_output, history_text
-            )
+        with tracer.start_as_current_span("skill_execution") as span:
+            if plan.response_mode == "escalation":
+                final_response = await asyncio.to_thread(
+                    EscalationSummarySkill.execute,
+                    user_query, tool_output, history_text
+                )
+            else:
+                final_response = await asyncio.to_thread(
+                    StandardResponseSkill.execute,
+                    user_query, tool_output, history_text
+                )
+            span.set_attribute("response.mode", plan.response_mode)
+            span.set_attribute("response.output", str(final_response))
         await asyncio.to_thread(save_message, user["username"], "user", user_query)
         await asyncio.to_thread(save_message, user["username"], f"{plan.tool_name} output", tool_output)
         await asyncio.to_thread(save_message, user["username"], "assistant", final_response)

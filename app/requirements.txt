@@ -9,3 +9,7 @@ python-jose
 httpx
 mcp
 groq==0.37.1
+opentelemetry-sdk
+opentelemetry-exporter-otlp-proto-grpc
+opentelemetry-instrumentation-fastapi
+opentelemetry-instrumentation-httpx

@@ -118,7 +118,7 @@
     "roles": [
       "sales_user"
     ],
-    "query": "Can you summarize stark's situation?",
+    "query": "Can you escalate stark's situation?",
     "expected_error": "403"
   },
   {
