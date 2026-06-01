@@ -200,12 +200,31 @@ def generate_plan(user_query: str) -> ToolPlan:
         messages=[
             {
                 "role": "system",
-                "content": (
-                    "You are an enterprise operations assistant. "
-                    "Use the available tools to answer the user's query. "
-                    "For risk assessments, executive summaries, or severity questions use response_mode=escalation. "
-                    "For all other lookups use response_mode=standard."
-                )
+                "content": """
+                You are an enterprise tool planner.
+                
+                You MUST choose exactly one tool from the provided tool list.
+                
+                Allowed tools:
+                - customer_profile_tool
+                - issue_history_tool
+                - create_next_action_tool
+                - add_issue_update_tool
+                
+                Never call, reference, or invent any other tool.
+                
+                Do not use:
+                - brave_search
+                - web_search
+                - search
+                - internet_search
+                - google_search
+                - browser
+                If none of the allowed tools can satisfy the request,
+                choose the closest allowed tool and populate its arguments appropriately.
+                
+                You must only return a tool call from the allowed tool list.
+                """
             },
             {
                 "role": "user",

@@ -1,8 +1,6 @@
 from app.agent.exceptions import PlannerValidationError
 from app.agent.llm import generate_plan
 from app.agent.models import ToolPlan
-from app.auth.tool_permissions import TOOL_PERMISSIONS
-from app.auth.user_context import current_user
 from app.observability.logger import logger
 
 AVAILABLE_TOOLS = [
@@ -35,13 +33,27 @@ def create_plan(user_query: str):
     feedback = ""
     for attempt in range(1, MAX_PLANNER_RETRIES + 1):
         try:
-            plan = generate_plan(f"{user_query}\n{feedback}")
+            prompt = f"""
+                Available Tools:
+                {AVAILABLE_TOOLS}
+                
+                You may ONLY use the tools listed above.
+                Do not invent tool names.
+                Do not use external search tools.
+                
+                {user_query}
+                
+                {feedback}
+                """
+            plan = generate_plan(prompt)
             logger.info(f"Planner Attempt {attempt}")
             logger.info(f"Validating planner response: {plan}")
             _validate_plan(plan)
             logger.info(f"Planner response validated: {plan.model_dump()}")
             return plan
         except Exception as e:
+            if "Error code: 429" in str(e):
+                raise Exception(f"Planner failed due to {str(e)}")
             logger.error(f"Planner Attempt {attempt} Failed. ERROR:\n{str(e)}", exc_info=True)
             feedback = f"""
             PREVIOUS ATTEMPT FAILED.

@@ -1,13 +1,9 @@
 from app.agent.llm import generate_response
-from app.auth.tool_authorizer import authorize_tool
-from app.auth.user_context import current_user
 
 
 class EscalationSummarySkill:
     @staticmethod
     def execute(user_query: str, customer_data: str, conversation_history: str):
-        user = current_user.get()
-        authorize_tool("escalation_summary_skill", user)
         facts = generate_response(f"Extract key facts from this data as bullet points:\n{customer_data}")
         risk = generate_response(
             f"Given these facts:\n{facts}\n Assign a risk level: Low/Medium/High/Critical. Reply with one word.")

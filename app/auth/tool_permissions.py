@@ -5,3 +5,8 @@ TOOL_PERMISSIONS = {
     "add_issue_update_tool": ["support_user", "admin"],
     "create_next_action_tool": ["admin"]
 }
+
+SKILLS_PERMISSIONS = {
+    "standard": ["sales_user", "support_user", "admin"],
+    "escalation": ["support_user", "admin"],
+}

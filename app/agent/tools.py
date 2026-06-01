@@ -1,11 +1,7 @@
-from app.auth.tool_authorizer import authorize_tool
-from app.auth.user_context import current_user
 from app.mcp.client import execute_mcp_tool
 
 
 async def customer_lookup(customer_name: str):
-    user = current_user.get()
-    authorize_tool("customer_profile_tool", user)
     return await execute_mcp_tool(
         "customer_profile_tool",
         {"customer_name": customer_name},
@@ -13,8 +9,6 @@ async def customer_lookup(customer_name: str):
 
 
 async def issue_history_lookup(issue_id: str):
-    user = current_user.get()
-    authorize_tool("issue_history_tool", user)
     return await execute_mcp_tool(
         "issue_history_tool",
         {"issue_id": int(issue_id)},
@@ -22,8 +16,6 @@ async def issue_history_lookup(issue_id: str):
 
 
 async def add_issue_update_tool(issue_id: int, update_text: str):
-    user = current_user.get()
-    authorize_tool("add_issue_update_tool", user)
     return await execute_mcp_tool(
         "add_issue_update_tool",
         {
@@ -33,9 +25,7 @@ async def add_issue_update_tool(issue_id: int, update_text: str):
     )
 
 
-async def create_next_action_tool(issue_id: int, action_text: str):
-    user = current_user.get()
-    authorize_tool("create_next_action_tool", user)
+async def create_next_action_tool(issue_id: int, action_text: str, user: dict):
     return await execute_mcp_tool(
         "create_next_action_tool",
         {

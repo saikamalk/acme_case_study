@@ -18,17 +18,17 @@ class StandardResponseSkill:
         Reply with either "None" or a short bullet list of missing items.
         """)
         prompt = f"""
-Conversation History:
-{conversation_history}
-User Question:{user_query}
-Relevant facts: {facts}
-Missing information: {gaps}
-
-Answer the user's question using only the facts above.
-Rules:
-- Be concise and professional
-- Do not invent facts
-- If information is missing, say so briefly
-- No section headers, just a clean direct answer
-"""
+                Conversation History:
+                {conversation_history}
+                User Question:{user_query}
+                Relevant facts: {facts}
+                Missing information: {gaps}
+                
+                Answer the user's question using only the facts above.
+                Rules:
+                - Be concise and professional
+                - Do not invent facts
+                - If information is missing, say so briefly
+                - No section headers, just a clean direct answer
+                """
         return generate_response(prompt)
