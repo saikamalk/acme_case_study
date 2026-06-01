@@ -63,4 +63,5 @@ Enterprise environments often integrate with:
 - Ticketing systems
 - Internal APIs
 Using MCP allows these integrations to evolve independently from the agent.
+
 This makes the architecture easier to maintain and extend.
