@@ -1,16 +1,11 @@
-import asyncio
-from app.agent.entity_resolver import resolve_customer_name
 from app.auth.tool_authorizer import authorize_tool
 from app.auth.user_context import current_user
 from app.mcp.client import execute_mcp_tool
 
 
-async def customer_lookup(query: str):
+async def customer_lookup(customer_name: str):
     user = current_user.get()
     authorize_tool("customer_profile_tool", user)
-    customer_name = await asyncio.to_thread(resolve_customer_name, query)
-    if customer_name == "NONE":
-        return {"error": "Customer not found"}
     return await execute_mcp_tool(
         "customer_profile_tool",
         {"customer_name": customer_name},
