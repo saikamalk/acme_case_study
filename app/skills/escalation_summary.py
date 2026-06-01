@@ -14,7 +14,7 @@ class EscalationSummarySkill:
         recommendation = generate_response(
             f"Given risk={risk} and facts:\n{facts}\nSuggest a single concrete next action.")
         gaps = generate_response(
-            f"Given facts:\,{facts}\nWhat key information is missing to fully assess this customer?")
+            f"Given facts:\n{facts}\nWhat key information is missing to fully assess this customer?")
         return generate_response(
             f"""
             User question: {user_query}

@@ -14,18 +14,6 @@ AVAILABLE_TOOLS = [
 MAX_PLANNER_RETRIES = 3
 
 
-def _check_role_permission(plan: ToolPlan):
-    user = current_user.get()
-    if not user:
-        return
-    allowed_roles = TOOL_PERMISSIONS.get(plan.tool_name)
-    user_roles = user.get("roles")
-    if not any(r in user_roles for r in allowed_roles):
-        raise PlannerValidationError(
-            f"Role {user_roles} not permitted to use {plan.tool_name}. Suggest an alternative approach or inform the user."
-        )
-
-
 def _validate_plan(plan: ToolPlan):
     if plan.tool_name == "customer_profile_tool":
         if not plan.customer_name:
@@ -51,7 +39,6 @@ def create_plan(user_query: str):
             logger.info(f"Planner Attempt {attempt}")
             logger.info(f"Validating planner response: {plan}")
             _validate_plan(plan)
-            _check_role_permission(plan)
             logger.info(f"Planner response validated: {plan.model_dump()}")
             return plan
         except Exception as e:

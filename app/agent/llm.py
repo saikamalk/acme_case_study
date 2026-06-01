@@ -35,7 +35,25 @@ TOOL_SCHEMAS = [
         "type": "function",
         "function": {
             "name": "customer_profile_tool",
-            "description": "Retrieve customer profile, open issues, and operational status. Use for customer lookups, summaries, escalation analysis, and risk assessments.",
+            "description": """
+            Retrieve customer profile information.
+            Use ONLY when the user is asking about:
+            - customer details
+            - customer profile
+            - customer information
+            - account information
+            - customer status
+            - open issues for a customer
+            Do NOT use for:
+            - issue history
+            - issue updates
+            - next actions
+            - next steps
+            - action plans
+            - recommendations
+            - creating records
+            - saving records
+            """,
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -57,7 +75,19 @@ TOOL_SCHEMAS = [
         "type": "function",
         "function": {
             "name": "issue_history_tool",
-            "description": "Retrieve history and updates for a specific issue. Only use when a specific issue ID is referenced.",
+            "description": """
+            Retrieve issue history and issue details.
+            Use when the user asks:
+            - issue history
+            - issue details
+            - issue status
+            - issue timeline
+            - updates on an issue
+            Do NOT use for:
+            - customer profile lookup
+            - creating next actions
+            - adding updates
+            """,
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -79,7 +109,29 @@ TOOL_SCHEMAS = [
         "type": "function",
         "function": {
             "name": "create_next_action_tool",
-            "description": "Create and persist a recommended next action for an issue. Only use when the user explicitly wants to CREATE or SAVE a next action.",
+            "description": """
+            Create and save a next action for an issue.
+            Use when the user asks:
+            - create next action
+            - add next action
+            - save next action
+            - insert next action
+            - create next actions
+            - add action item
+            - create action item
+            If the request contains both:
+            - an issue reference
+            and
+            - an action description
+            then prefer this tool over all other tools.
+            Examples:
+            - Create next action for issue 3. Action is fix to be deployed.
+            - Add next action for issue 5: Contact customer.
+            - Save next action for issue 2.
+            Do NOT use for:
+            - viewing issue history
+            - viewing customer profiles
+            """,
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -105,7 +157,19 @@ TOOL_SCHEMAS = [
         "type": "function",
         "function": {
             "name": "add_issue_update_tool",
-            "description": "Add an update or note to an existing issue. Only use when the user wants to record or append a note to issue history.",
+            "description": """
+            Add and save an update to an issue.
+            Use when the user asks:
+            - add update
+            - create update
+            - save update
+            - post update
+            - update issue
+            Do NOT use for:
+            - creating next actions
+            - customer profile lookup
+            - issue history retrieval
+            """,
             "parameters": {
                 "type": "object",
                 "properties": {
