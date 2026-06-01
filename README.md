@@ -14,7 +14,7 @@ The solution demonstrates a realistic enterprise architecture that combines:
 - Evaluation and observability
 - End-to-end Docker Compose deployment
 
-The assistant can dynamically determine which tools to invoke, retrieve grounded information from enterprise data, enforce role-based access control, and generate actionable recommendations for support and operations teams.
+The assistant can dynamically selects appropriate enterprise tool and response strategy for each request, retrieve grounded information from enterprise data, enforce role-based access control, and generate actionable recommendations for support and operations teams.
 
 ## Assessment Objectives Demonstrated
 This solution demonstrates all required capabilities from the assessment brief:
@@ -302,14 +302,11 @@ Evaluation covers:
 - RBAC validation
 - Recommendation quality
 
-Summary Results:
-- Tool Selection Accuracy: 100%
-- RBAC Validation: 100%
-- Database Grounding: 100%
-- Recommendation Generation: 100%
-
-Artifacts:
-
+Summary Results are generated from the evaluation suite and can be reproduced by running:
+```bash
+python evals/run_eval.py
+```
+Latest results are available in:
 - [evals/test_cases.json](evals/test_cases.json)
 - [evals/results.json](evals/results.json)
 - [evals/summary.md](evals/summary.md)
@@ -377,6 +374,12 @@ No AI-generated code was accepted without review and testing.
 
 ```text
 app/                # FastAPI application
+├── agent/
+├── auth/
+├── cache/
+├── mcp/
+├── observability/
+├── skills/
 keycloak/           # Keycloak configuration
 mcp_server/         # MCP tool server
 seed/               # Database seed scripts
