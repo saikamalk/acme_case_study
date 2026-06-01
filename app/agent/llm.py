@@ -37,15 +37,25 @@ TOOL_SCHEMAS = [
             "name": "customer_profile_tool",
             "description": """
             Retrieve customer profile information.
-            Use ONLY when the user is asking about:
+            
+            Use this as the default tool when the user asks about a customer/company, including:
             - customer details
             - customer profile
             - customer information
             - account information
             - customer status
             - open issues for a customer
+            - all issues for a customer
+            - situation of a customer
+            - executive summary for a customer
+            
+            Examples:
+            - "Show open issues for Globex" -> customer_profile_tool
+            - "How bad is Globex's situation?" -> customer_profile_tool
+            
             Do NOT use for:
-            - issue history
+            - issue history by issue id
+            - issue timeline
             - issue updates
             - next actions
             - next steps
@@ -59,7 +69,7 @@ TOOL_SCHEMAS = [
                 "properties": {
                     "customer_name": {
                         "type": "string",
-                        "description": "The customer name to look up"
+                        "description": "The customer/company name to look up.",
                     },
                     "response_mode": {
                         "type": "string",
@@ -77,15 +87,19 @@ TOOL_SCHEMAS = [
             "name": "issue_history_tool",
             "description": """
             Retrieve issue history and issue details.
-            Use when the user asks:
-            - issue history
-            - issue details
-            - issue status
-            - issue timeline
-            - updates on an issue
+            
+            Use ONLY when the user explicitly provides an issue id/number.
+            Examples:
+            - "Show issue 12 history" -> issue_history_tool
+            - "What is the status of issue 7?" -> issue_history_tool
+            
+            Do NOT use if the request only mentions a customer/company name.
+            Do NOT infer or fabricate issue_id from customer name.
             Do NOT use for:
             - customer profile lookup
-            - creating next actions
+            - open issues for a customer
+            - executive summary for a customer
+            - next actions
             - adding updates
             """,
             "parameters": {
@@ -93,7 +107,7 @@ TOOL_SCHEMAS = [
                 "properties": {
                     "issue_id": {
                         "type": "integer",
-                        "description": "The issue ID to retrieve history for"
+                        "description": "The explicit issue ID to retrieve history for"
                     },
                     "response_mode": {
                         "type": "string",

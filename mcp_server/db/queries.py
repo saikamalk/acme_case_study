@@ -23,7 +23,7 @@ def get_customer_by_name(name: str):
         query = text("""
                      SELECT *
                      FROM customers
-                     WHERE LOWER(name) = LOWER(:name)
+                     WHERE LOWER(name) LIKE LOWER('%' || :name || '%')
                      """)
         result = session.execute(
             query,
