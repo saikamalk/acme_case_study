@@ -18,7 +18,7 @@ client = Groq(
 
 def generate_response(prompt: str):
     response = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
+        model="openai/gpt-oss-120b",
         messages=[
             {
                 "role": "user",
@@ -210,7 +210,7 @@ TOOL_SCHEMAS = [
 
 def generate_plan(user_query: str) -> ToolPlan:
     response = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
+        model="openai/gpt-oss-120b",
         messages=[
             {
                 "role": "system",
