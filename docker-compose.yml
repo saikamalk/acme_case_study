@@ -43,8 +43,6 @@ services:
       context: .
       dockerfile: mcp_server/Dockerfile
     container_name: acme-mcp
-    ports:
-      - "8100:8100"
     depends_on:
       postgres:
         condition: service_healthy
